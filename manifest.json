@@ -11,8 +11,11 @@
         "https://bugs.webkit.org/*"
     ],
     "background": {
+        "persistent": false,
         "scripts": [
-            "js/background.js"
+            "js/bug_migrator.js",
+            "js/url_checker.js",
+            "js/event_pages.js"
         ]
     },
     "page_action": {

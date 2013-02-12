@@ -1,11 +1,17 @@
-function isBugzilla (url) {
+var UrlChecker = UrlChecker || {};
+
+(function(){
+
+UrlChecker.isBugzilla = function (url) {
     return url.indexOf("https://bugs.webkit.org/") === 0;
 }
 
-function isBug (url) {
+UrlChecker.isBug = function (url) {
     return url.indexOf("https://bugs.webkit.org/show_bug") === 0;
 }
 
-function isBugList (url) {
+UrlChecker.isBugList = function (url) {
     return url.indexOf("https://bugs.webkit.org/buglist") === 0;
 }
+
+})();

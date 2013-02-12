@@ -1,0 +1,15 @@
+Does the migrate button appear on bug pages?
+YES
+
+Does clicking on a migrate button open a new tab with a crbug prefilled with information from the bug?
+NO
+
+Do migrate buttons appear on a bug listing page?
+NO
+
+Does the migrate button detect when a bug has already been migrated?
+NO
+
+Does the migrate button link you to the corresponding crbug when a bug has already been migrated?
+NO
+

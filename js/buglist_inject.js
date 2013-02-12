@@ -1,1 +1,5 @@
-console.log("aoweu list");
+(function(){
+
+
+
+})();
