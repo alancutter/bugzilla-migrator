@@ -44,7 +44,7 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     console.log(request);
     switch (request.message) {
         case "migrateBug":
-            BugMigration.migrateBug(request.bugId, request.bugData);
+            BugMigrator.migrateBug(request.bugId, request.bugData);
             break;
     }
 });

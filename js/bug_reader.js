@@ -2,7 +2,7 @@ var BugReader = BugReader || {};
 
 (function(){
 
-BugReader.getBugData = function (document) {
+BugReader.getBugDataFromDom = function (document) {
     // FIXME: Implement this.
     return {};
 }
