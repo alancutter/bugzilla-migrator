@@ -1,13 +1,16 @@
 {
     "manifest_version": 2,
-    "name": "Bugzilla Migrator",
+    "name": "WebKit Bugzilla Bug Migrator",
     "version": "1",
-    "description": "Assists with the task of copying Webkit bugs into Chromium issues.",
+    "description": "Copy Webkit Bugzilla bugs into Chromium issues.",
     "icons": {
+        "16": "img/icon16.png",
+        "48": "img/icon48.png",
         "128": "img/icon128.png"
     },
     "permissions": [
         "tabs",
+        "storage",
         "https://bugs.webkit.org/*"
     ],
     "background": {
@@ -20,7 +23,9 @@
     },
     "page_action": {
         "default_icon": {
-            "19": "img/popup19.png"
-        }
+            "19": "img/popup19.png",
+            "38": "img/popup38.png"
+        },
+        "default_title": "WebKit Bugzilla Bug Migrator"
     }
 }

@@ -1,7 +1,11 @@
 (function(){
 
+// FIXME: Remove debug log.
+console.log("chrome:");
+console.log(chrome);
+
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
-    // FIXME: Take this out of stub land.
+    // FIXME: Implement this.
     sendResponse("test@example.com")
 });
 

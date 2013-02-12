@@ -1,4 +1,4 @@
-// import bug_reader.BugReader
+// from bug_reader import BugReader
 
 var BugMigrator = BugMigrator || {};
 
