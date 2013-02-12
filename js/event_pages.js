@@ -1,4 +1,5 @@
 // from bug_migrator import BugMigrator
+// from id_storage import IdStorage
 // from url_checker import UrlChecker
 
 (function(){
@@ -8,6 +9,8 @@ console.log("chrome:");
 console.log(chrome);
 
 // Content script injects.
+// FIXME: http://code.google.com/p/chromium/issues/detail?id=162543
+//        Double event firing appears not to be resolved...
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     // Tab navigation events
     if (changeInfo.status === "loading") {
@@ -42,11 +45,17 @@ chrome.pageAction.onClicked.addListener(function (tab) {
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
     console.log("Message received by background:");
     console.log(request);
+    var response = false;
     switch (request.message) {
+        case "bg.getCrIssueId":
+            IdStorage.bg.getCrIssueId(request.bugId, sendResponse);
+            response = true;
+            break;
         case "bg.migrateBug":
-            BugMigrator.bg_migrateBug(request.bugId, request.bugData);
+            BugMigrator.bg.migrateBug(request.bugId, request.bugData);
             break;
     }
+    return response;
 });
 
 })();

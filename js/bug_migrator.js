@@ -1,6 +1,7 @@
 // from bug_reader import BugReader
 
-var BugMigrator = BugMigrator || {};
+if (!BugMigrator) {
+var BugMigrator = {};
 
 (function(){
 
@@ -13,3 +14,4 @@ BugMigrator.bg.migrateBug = function (bugId, bugData) {
 }
 
 })();
+}

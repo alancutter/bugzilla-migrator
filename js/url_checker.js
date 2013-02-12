@@ -1,5 +1,5 @@
-var UrlChecker = UrlChecker || {};
-
+if (!UrlChecker) {
+var UrlChecker = {};
 (function(){
 
 UrlChecker.isBugzilla = function (url) {
@@ -15,3 +15,4 @@ UrlChecker.isBugList = function (url) {
 }
 
 })();
+}

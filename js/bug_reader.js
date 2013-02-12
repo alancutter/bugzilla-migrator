@@ -1,5 +1,5 @@
-var BugReader = BugReader || {};
-
+if (!BugReader) {
+var BugReader = {};
 (function(){
 
 BugReader.getBugDataFromDom = function (document) {
@@ -8,3 +8,4 @@ BugReader.getBugDataFromDom = function (document) {
 }
 
 })();
+}

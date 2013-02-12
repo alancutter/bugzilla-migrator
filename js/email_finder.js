@@ -1,3 +1,5 @@
+if (!EmailFinder) {
+var EmailFinder = {};
 (function(){
 
 // FIXME: Remove debug log.
@@ -14,3 +16,4 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
 });
 
 })();
+}

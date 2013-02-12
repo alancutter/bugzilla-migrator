@@ -12,4 +12,3 @@ NO
 
 Does the migrate button link you to the corresponding crbug when a bug has already been migrated?
 NO
-

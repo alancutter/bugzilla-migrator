@@ -16,7 +16,7 @@
     "background": {
         "persistent": false,
         "scripts": [
-            "js/storage.js",
+            "js/id_storage.js",
             "js/bug_reader.js",
             "js/bug_migrator.js",
             "js/url_checker.js",
