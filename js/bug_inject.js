@@ -2,16 +2,18 @@
 
 (function () {
 
+var cs = {};
+
 var container = document.querySelector(".bz_alias_short_desc_container");
 var form = document.querySelector("form[name=changeform]");
 var bugId = form.id.value;
 
-function inject () {
-    var button = ButtonMaker.createButton(bugId);
+cs.inject = function () {
+    var button = ButtonMaker.cs.createButton(bugId);
     button.style.float = "right";
     container.appendChild(button);
 }
 
-inject();
+cs.inject();
 
 })();

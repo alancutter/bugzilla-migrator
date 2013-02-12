@@ -4,23 +4,27 @@ var ButtonMaker = ButtonMaker || {};
 
 (function(){
 
-ButtonMaker.createButton = function (bugId) {
+ButtonMaker.cs = {};
+
+ButtonMaker.cs.createButton = function (bugId) {
     // FIXME: Check if the bug has already been migrated.
-    return createMigrateButton(bugId);
+    return cs.createMigrateButton(bugId);
 }
 
-function createMigrateButton (bugId) {
+var cs = {};
+
+function cs.createMigrateButton (bugId) {
     // FIXME: Check if the bug is open or not.
     var button = document.createElement("button");
     button.type = "button";
     button.innerHTML = 'migrate';
-    button.addEventListener("click", function () {sendMigrate(bugId);})
+    button.addEventListener("click", function () {cs.sendMigrate(bugId);})
     return button;
 }
 
-function sendMigrate (bugId) {
+function cs.sendMigrate (bugId) {
     chrome.extension.sendMessage({
-        message: "migrateBug",
+        message: "bg_migrateBug",
         bugId: bugId,
         bugData: BugReader.getBugDataFromDom(document),
     });

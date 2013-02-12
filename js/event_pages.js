@@ -31,7 +31,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 // Popup icon clicked.
 chrome.pageAction.onClicked.addListener(function (tab) {
-    chrome.tabs.sendMessage(tab.id, "findEmail", function (email) {
+    chrome.tabs.sendMessage(tab.id, {message: "cs_findEmail"}, function (email) {
         chrome.tabs.create({
             url: "html/migrate_bugs.html?email=" + email
         });
@@ -43,8 +43,8 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     console.log("Message received by background:");
     console.log(request);
     switch (request.message) {
-        case "migrateBug":
-            BugMigrator.migrateBug(request.bugId, request.bugData);
+        case "bg.migrateBug":
+            BugMigrator.bg_migrateBug(request.bugId, request.bugData);
             break;
     }
 });
