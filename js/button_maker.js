@@ -34,7 +34,10 @@ ButtonMaker.cs.createButton = function (bugId, bugDocument, callback) { // callb
 var crIssueButtonTemplate = '<a href="{{ url }}">' +
                             '    <button type="button">Cr Issue {{ id }}</button>' +
                             '</a>';
-var migrateButtonTemplate = '<button type="button">migrate</button>';
+var migrateButtonTemplate = '<button type="button">' +
+                            '    migrate bug' +
+                            '    <img src="' + chrome.extension.getURL("img/popup19.png") + '"/>' +
+                            '</button>';
 
 var cs = {};
 
@@ -60,10 +63,9 @@ cs.createCrIssueButton = function (crIssueId) {
 cs.createMigrateButton = function (bugId, bugReader) {
     var button = HTML.fromTemplate(migrateButtonTemplate);
     button.addEventListener("click", function () {
-        if (!bugDocument) {
-            bugDocument = BugReader.getBugDocument(bugId);
-        }
-        cs.migrateBug(bugId, BugReader);
+        bugReader.getBugData(function (bugData) {
+            cs.migrateBug(bugId, bugData);
+        });
     });
     return button;
 }

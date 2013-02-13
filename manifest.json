@@ -29,5 +29,8 @@
             "38": "img/popup38.png"
         },
         "default_title": "WebKit Bugzilla Bug Migrator"
-    }
+    },
+    "web_accessible_resources": [
+        "img/popup19.png"
+    ]
 }
