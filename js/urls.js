@@ -17,5 +17,9 @@ Urls.isBugList = function (url) {
     return url.indexOf(Urls.bugzillaUrlBase + "buglist") === 0;
 }
 
+Urls.getBugUrl = function (bugId) {
+    return Urls.bugzillaUrlBase + "show_bug.cgi?id=" + bugId;
+}
+
 })();
 }

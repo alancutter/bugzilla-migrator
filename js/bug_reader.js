@@ -1,18 +1,32 @@
+// from html import HTML
+// from urls import Urls
+
 function BugReader (bugId, bugDocument) {
     this.bugId = bugId;
-    this.bugDocument = bugDocument;
     if (bugDocument) {
-        this.bugData = BugReader.readBugData(this.bugDocument);
+        this.bugData = BugReader.readBugData(bugDocument);
     }
 }
 
 (function(){
 
-BugReader.prototype.getBugData = function (callback) { // callback = function (bugData)
+BugReader.readBugData = function (bugDocument) {
     // FIXME: Implement this.
-    this.bugDocument = {};
-    this.bugData = BugReader.readBugData(this.bugDocument);
-    callback(this.bugData);
+    return {
+        valid: true,
+        active: true,
+    };
+}
+
+BugReader.prototype.getBugData = function (callback) { // callback = function (bugData)
+    if (!this.loaded()) {
+        // FIXME: Implement this.
+        HTML.fromUrl(Urls.getBugUrl(this.bugId), function (bugDocument) {
+            this.bugData = BugReader.readBugData(bugDocument);
+        });
+    } else {
+        callback(this.bugData);
+    }
 }
 
 BugReader.prototype.getLoadedBugData = function () {
@@ -20,14 +34,7 @@ BugReader.prototype.getLoadedBugData = function () {
 }
 
 BugReader.prototype.loaded = function () {
-    return !(!this.bugDocument);
-}
-
-BugReader.readBugData = function (bugDocument) {
-    // FIXME: Implement this.
-    return {
-        active: true,
-    };
+    return !(!this.bugData);
 }
 
 })();

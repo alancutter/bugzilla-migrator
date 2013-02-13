@@ -1,5 +1,5 @@
 // from bug_reader import BugReader
-// from template_builder import TemplateBuilder
+// from html import HTML
 // from urls import Urls
 
 if (!ButtonMaker) {
@@ -16,8 +16,15 @@ ButtonMaker.cs.createButton = function (bugId, bugDocument, callback) { // callb
             // Cr Issue already created, no need to migrate.
             callback(cs.createCrIssueButton(crIssueId));
         } else {
-            // No Cr Issue found, offer to migrate if bug is still active.
-            if (!bugReader.loaded() || bugReader.getLoadedBugData().active) {
+            // No Cr Issue found, offer to migrate if bug is valid and active.
+            var migrate = true;
+            if (bugReader.loaded()) {
+                var bugData = bugReader.getLoadedBugData();
+                if (!bugData.valid || !bugData.active) {
+                    migrate = false;
+                }
+            }
+            if (migrate) {
                 callback(cs.createMigrateButton(bugId, bugReader));
             }
         }
@@ -43,7 +50,7 @@ cs.getCrIssueId = function (bugReader, callback) { // callback = function (crIss
 }
 
 cs.createCrIssueButton = function (crIssueId) {
-    return TemplateBuilder.build(
+    return HTML.fromTemplate(
         crIssueButtonTemplate, {
             url: Urls.crIssueBase + crIssueId,
             id: crIssueId,
@@ -51,7 +58,7 @@ cs.createCrIssueButton = function (crIssueId) {
 }
 
 cs.createMigrateButton = function (bugId, bugReader) {
-    var button = TemplateBuilder.build(migrateButtonTemplate);
+    var button = HTML.fromTemplate(migrateButtonTemplate);
     button.addEventListener("click", function () {
         if (!bugDocument) {
             bugDocument = BugReader.getBugDocument(bugId);

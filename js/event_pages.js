@@ -17,8 +17,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
             if (Urls.isBug(tab.url)) {
                 // Inject button onto Webkit bug.
+                chrome.tabs.executeScript(tabId, {file: "js/template.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/bug_reader.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/template_builder.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/html.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/button_maker.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/bug_inject.js"});
