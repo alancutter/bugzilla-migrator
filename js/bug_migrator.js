@@ -2,7 +2,6 @@
 
 if (!BugMigrator) {
 var BugMigrator = {};
-
 (function(){
 
 BugMigrator.bg = {};

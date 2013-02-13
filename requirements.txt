@@ -4,6 +4,9 @@ YES
 Does clicking on a migrate button open a new tab with a crbug prefilled with information from the bug?
 NO
 
+Does migrating a bug add a comment to the bug with the new cr issue?
+NO
+
 Do migrate buttons appear on a bug listing page?
 NO
 

@@ -11,7 +11,7 @@ var bugId = form.id.value;
 var cs = {};
 
 cs.inject = function () {
-    var button = ButtonMaker.cs.createButton(bugId, function (button) {
+    ButtonMaker.cs.createButton(bugId, function (button) {
         button.style.float = "right";
         container.appendChild(button);
     });
