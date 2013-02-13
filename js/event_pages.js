@@ -1,31 +1,28 @@
 // from bug_migrator import BugMigrator
 // from id_storage import IdStorage
-// from url_checker import UrlChecker
+// from urls import Urls
 
 (function(){
 
-// FIXME: Remove debug log.
-console.log("chrome:");
-console.log(chrome);
-
 // Content script injects.
 // FIXME: http://code.google.com/p/chromium/issues/detail?id=162543
-//        Double event firing appears not to be resolved...
+//        Double event firing appears not to be resolved in stable.
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     // Tab navigation events
     if (changeInfo.status === "loading") {
-        if (UrlChecker.isBugzilla(tab.url)) {
+        if (Urls.isBugzilla(tab.url)) {
             // Show icon in search bar.
             chrome.pageAction.show(tabId);
             chrome.tabs.executeScript(tabId, {file: "js/email_finder.js"});
 
-            if (UrlChecker.isBug(tab.url)) {
+            if (Urls.isBug(tab.url)) {
                 // Inject button onto Webkit bug.
                 chrome.tabs.executeScript(tabId, {file: "js/bug_reader.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/template_builder.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/button_maker.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/bug_inject.js"});
-            } else if (UrlChecker.isBugList(tab.url)) {
+            } else if (Urls.isBugList(tab.url)) {
                 // Inject button onto search results.
                 chrome.tabs.executeScript(tabId, {file: "js/buglist_inject.js"});
             }
