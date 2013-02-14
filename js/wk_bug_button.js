@@ -2,13 +2,16 @@
 // from html import Html
 // from urls import Urls
 
-function WkBugButton (wkBugId, wkBugDocument) {
+if (!WkBugButton) {
+var WkBugButton;
+(function(){
+
+WkBugButton = function (wkBugId, wkBugDocument) {
     this.wkBugReader = new WkBugReader(wkBugId, wkBugDocument);
     this.html = document.createElement("span");
     this.loadInitialHtml();
 }
 
-(function(){
 
 var htmlTemplates = {
     crBugRedirect: '<a href="{{ url }}">' +
@@ -31,7 +34,7 @@ WkBugButton.prototype.loadInitialHtml = function () {
             var migrate = true;
             if (this.wkBugReader.loaded()) {
                 var wkBugData = this.wkBugReader.getLoadedWkBugData();
-                if (!wkBugData.valid || !wkBugData.active) {
+                if (!wkBugData || !wkBugData.active) {
                     migrate = false;
                 }
             }
@@ -89,3 +92,4 @@ WkBugButton.prototype.migrateWkBug = function () {
 
 
 })();
+}
