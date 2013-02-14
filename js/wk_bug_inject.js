@@ -12,9 +12,7 @@ var cs = {};
 
 cs.inject = function () {
     var wkBugButton = new WkBugButton(wkBugId, document);
-    wkBugButton.html.style.float = "right";
     container.appendChild(wkBugButton.html);
-    container.style.paddingBottom = "13px";
 }
 
 cs.inject();

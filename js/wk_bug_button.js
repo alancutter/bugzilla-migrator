@@ -46,10 +46,16 @@ WkBugButton.prototype.loadInitialHtml = function () {
 }
 
 WkBugButton.prototype.setInnerHtml = function (html) {
-    if (this.html.firstChild) {
-        this.html.replaceChild(html, this.html.firstChild);
+    if (html) {
+        if (this.html.firstChild) {
+            this.html.replaceChild(html, this.html.firstChild);
+        } else {
+            this.html.appendChild(html);
+        }
     } else {
-        this.html.appendChild(html);
+        while (this.html.hasChildNodes()) {
+            this.html.removeChild(this.html.firstChild);
+        }
     }
 }
 
