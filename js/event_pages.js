@@ -1,4 +1,4 @@
-// from bug_migrator import BugMigrator
+// from wk_bug_migrator import WkBugMigrator
 // from id_storage import IdStorage
 // from urls import Urls
 
@@ -15,17 +15,17 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             chrome.pageAction.show(tabId);
             chrome.tabs.executeScript(tabId, {file: "js/email_finder.js"});
 
-            if (Urls.isBug(tab.url)) {
+            if (Urls.isWkBug(tab.url)) {
                 // Inject button onto Webkit bug.
-                chrome.tabs.executeScript(tabId, {file: "js/template.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/bug_reader.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/html.js"});
                 chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/button_maker.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/bug_inject.js"});
-            } else if (Urls.isBugList(tab.url)) {
+                chrome.tabs.executeScript(tabId, {file: "js/template.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_reader.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_button.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_inject.js"});
+            } else if (Urls.isWkBugList(tab.url)) {
                 // Inject button onto search results.
-                chrome.tabs.executeScript(tabId, {file: "js/buglist_inject.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/wk_buglist_inject.js"});
             }
         }
     }
@@ -35,7 +35,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 chrome.pageAction.onClicked.addListener(function (tab) {
     chrome.tabs.sendMessage(tab.id, {message: "cs_findEmail"}, function (email) {
         chrome.tabs.create({
-            url: "html/migrate_bugs.html?email=" + email
+            url: "html/migrate_wk_bugs.html?email=" + email
         });
     });
 });
@@ -46,12 +46,12 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     console.log(request);
     var response = false;
     switch (request.message) {
-        case "bg.getCrIssueId":
-            IdStorage.bg.getCrIssueId(request.bugId, sendResponse);
+        case "bg.getCrBugId":
+            IdStorage.bg.getCrBugId(request.wkBugId, sendResponse);
             response = true;
             break;
-        case "bg.migrateBug":
-            BugMigrator.bg.migrateBug(request.bugId, request.bugData);
+        case "bg.migrateWkBug":
+            WkBugMigrator.bg.migrateWkBug(request.wkBugId, request.wkBugData);
             break;
     }
     return response;

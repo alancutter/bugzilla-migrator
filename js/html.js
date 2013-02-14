@@ -1,24 +1,24 @@
 // from template import Template
 
-if (!HTML) {
-var HTML = {};
+if (!Html) {
+var Html = {};
 (function(){
 
-HTML.fromString = function (html) {
+Html.fromString = function (html) {
     var dom = new DOMParser().parseFromString(html, "application/xml").firstChild;
     return domToHtml(dom);
 }
 
-HTML.fromTemplate = function (htmlTemplate, parameters) {
+Html.fromTemplate = function (htmlTemplate, parameters) {
     var html = Template.stamp(htmlTemplate, parameters);
-    return HTML.fromString(html);
+    return Html.fromString(html);
 }
 
-HTML.fromUrl = function (url, callback) {
+Html.fromUrl = function (url, callback) { // callback = function (html)
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url);
     xhr.addEventListener("load", function () {
-        callback(HTML.fromString(this.responseText));
+        callback(Html.fromString(this.responseText));
     });
     xhr.send();
 }

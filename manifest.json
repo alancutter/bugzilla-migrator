@@ -16,9 +16,11 @@
     "background": {
         "persistent": false,
         "scripts": [
+            "js/urls.js",
+            "js/html.js",
             "js/id_storage.js",
-            "js/bug_reader.js",
-            "js/bug_migrator.js",
+            "js/wk_bug_reader.js",
+            "js/wk_bug_migrator.js",
             "js/urls.js",
             "js/event_pages.js"
         ]
@@ -31,6 +33,6 @@
         "default_title": "WebKit Bugzilla Bug Migrator"
     },
     "web_accessible_resources": [
-        "img/popup19.png"
+        "img/*"
     ]
 }
