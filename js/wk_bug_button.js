@@ -60,9 +60,10 @@ WkBugButton.prototype.setInnerHtml = function (html) {
 }
 
 WkBugButton.prototype.getCrBugId = function (callback) { // callback = function (crBugId)
-    chrome.extension.sendMessage({
-        message: "bg.getCrBugId",
-        wkBugId: this.wkBugReader.wkBugId,
+    chrome.extension.sendMessage(
+        {
+            message: "bg.getCrBugId",
+            wkBugId: this.wkBugReader.wkBugId,
         },
         callback
     );

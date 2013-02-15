@@ -136,39 +136,74 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
         },
         dependentList: function () {
             var td = grab("#bz_show_bug_column_1 > table > tbody > tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr > td");
-            if (td) {
-                var dependentList = [];
-                var wkBugLinks = td.querySelectorAll("a[href^=show_bug]");
-                for (var i = 0; i < wkBugLinks.length; i++) {
-                    var wkBugLink = wkBugLinks[i];
-                    dependentList.push({
-                        id: wkBugLink.innerHTML,
-                        summary: wkBugLink.title,
-                        active: !(wkBugLink.parentElement.className == "bz_closed"),
-                    });
-                }
-                return dependentList;
+            if (!td) {
+                return null;
             }
-            return null;
+            var dependentList = [];
+            var wkBugLinks = td.querySelectorAll("a[href^=show_bug]");
+            for (var i = 0; i < wkBugLinks.length; i++) {
+                var wkBugLink = wkBugLinks[i];
+                dependentList.push({
+                    id: wkBugLink.innerHTML,
+                    summary: wkBugLink.title,
+                    active: !(wkBugLink.parentElement.className == "bz_closed"),
+                });
+            }
+            return dependentList;
         },
         blockingList: function () {
             var td = grab("#bz_show_bug_column_1 > table > tbody > tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr > td");
-            if (td) {
-                var blockingList = [];
-                var wkBugLinks = td.querySelectorAll("a[href^=show_bug]");
-                for (var i = 0; i < wkBugLinks.length; i++) {
-                    var wkBugLink = wkBugLinks[i];
-                    blockingList.push({
-                        id: wkBugLink.innerHTML,
-                        summary: wkBugLink.title,
-                        active: !(wkBugLink.parentElement.className == "bz_closed"),
-                    });
+            if (!td) {
+                return null;
+            }
+            var blockingList = [];
+            var wkBugLinks = td.querySelectorAll("a[href^=show_bug]");
+            for (var i = 0; i < wkBugLinks.length; i++) {
+                var wkBugLink = wkBugLinks[i];
+                blockingList.push({
+                    id: wkBugLink.innerHTML,
+                    summary: wkBugLink.title,
+                    active: !(wkBugLink.parentElement.className == "bz_closed"),
+                });
+            }
+            return blockingList;
+        },
+        patchList: function () {
+            var table = grab("#attachment_table");
+            if (!table) {
+                return null;
+            }
+            var patchList = [];
+            var rows = table.querySelectorAll("tr");
+            for (var i = 1; i < rows.length - 1; i++) {
+                var link = rows[i].querySelector("a[href^=attachment]");
+                var b = link.querySelector("b");
+                if (!b) {
+                    return null;
                 }
-                return blockingList;
+                patchList.push({
+                    name: b.innerHTML,
+                    url: (link.href.indexOf("http") !== 0 ? Urls.bugzillaBase : "") + link.href + "&action=prettypatch",
+                });
+            }
+            return patchList;
+        },
+        description: function () {
+            var comment = grab("#comment_text_0");
+            if (comment) {
+                return stringifyCommentNode(comment);
             }
             return null;
         },
-        // FIXME: Keep implementing this.
+        commentList: function () {
+            var commentList = [];
+            var commentContainer = grab("#comments");
+            var commentNodes = commentContainer.querySelectorAll("#comments > .bz_comment:not(.bz_first_comment)");
+            for (var i = 0; i < commentNodes.length; i++) {
+                commentList.push(stringifyCommentNode(commentNodes[i]));
+            }
+            return commentList;
+        }
     };
     var wkBugData = {};
     for (var attribute in extractMethods) {
@@ -177,6 +212,12 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
         wkBugData[attribute] = data;
     }
     return wkBugData;
+}
+
+function stringifyCommentNode (node) {
+    if 
+    var s = "";
+
 }
 
 // FIXME: Remove debug print.

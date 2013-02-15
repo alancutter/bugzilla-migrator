@@ -2,16 +2,31 @@ if (!Template) {
 var Template = {};
 (function(){
 
-var parameterPattern = /\{\{\s*(\w+)\s*\}\}/g;
+var parameterPattern = /\{\{\s*([\w\.]+)\s*\}\}/g;
 
 Template.stamp = function (template, parameters) {
     var result = template;
     if (parameters) {
-        var insertData;
-        while (insertData = parameterPattern.exec(template)) {
+        var matches;
+        while (matches = parameterPattern.exec(template)) {
+            var parameterPath = matches[1].split(".");
+            var value;
+            if (parameterPath.length > 0) {
+                value = parameters;
+                for (var i = 0; i < parameterPath.length; i++) {
+                    value = value[parameterPath[i]];
+                    if (value === undefined) {
+                        break;
+                    }
+                }
+            }
+            if (value === undefined) {
+                console.warn("Unable to stamp parameter in template:", matches, template);
+                value = "";
+            }
             result = result.replace(
-                insertData[0],
-                parameters[insertData[1]]
+                matches[0],
+                value
             )
         }
     }

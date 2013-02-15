@@ -16,12 +16,14 @@
     "background": {
         "persistent": false,
         "scripts": [
+            // Imports.
             "js/urls.js",
             "js/html.js",
             "js/id_storage.js",
             "js/wk_bug_reader.js",
             "js/wk_bug_migrator.js",
             "js/urls.js",
+            // Main script.
             "js/event_pages.js"
         ]
     },
