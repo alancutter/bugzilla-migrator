@@ -10,7 +10,7 @@ WkBugButton = function (wkBugId, wkBugDocument) {
     this.wkBugReader = new WkBugReader(wkBugId, wkBugDocument);
     this.html = document.createElement("span");
     this.loadInitialHtml();
-}
+};
 
 
 var htmlTemplates = {
@@ -43,7 +43,7 @@ WkBugButton.prototype.loadInitialHtml = function () {
             }
         }
     }.bind(this));
-}
+};
 
 WkBugButton.prototype.setInnerHtml = function (html) {
     if (html) {
@@ -57,7 +57,7 @@ WkBugButton.prototype.setInnerHtml = function (html) {
             this.html.removeChild(this.html.firstChild);
         }
     }
-}
+};
 
 WkBugButton.prototype.getCrBugId = function (callback) { // callback = function (crBugId)
     chrome.extension.sendMessage(
@@ -69,7 +69,7 @@ WkBugButton.prototype.getCrBugId = function (callback) { // callback = function 
     );
     // FIXME: Check the page for auto generated comments stating a cr issue migration.
     // if (wkBugReader.loaded()) {...}
-}
+};
 
 WkBugButton.prototype.setModeCrBugRedirect = function (crBugId) {
     this.setInnerHtml(Html.fromTemplate(
@@ -79,13 +79,13 @@ WkBugButton.prototype.setModeCrBugRedirect = function (crBugId) {
             id: crBugId,
         }
     ));
-}
+};
 
 WkBugButton.prototype.setModeMigrate = function () {
     var html = Html.fromTemplate(htmlTemplates.migrate);
     html.addEventListener("click", this.migrateWkBug.bind(this));
     this.setInnerHtml(html);
-}
+};
 
 WkBugButton.prototype.migrateWkBug = function () {
     this.wkBugReader.getWkBugData(function (wkBugData) {
@@ -95,7 +95,7 @@ WkBugButton.prototype.migrateWkBug = function () {
             wkBugData: wkBugData,
         });
     }.bind(this));
-}
+};
 
 
 })();

@@ -11,7 +11,7 @@ WkBugReader = function WkBugReader (wkBugId, wkBugDocument) {
     if (wkBugDocument) {
         this.wkBugData = WkBugReader.extractWkBugData(wkBugDocument);
     }
-}
+};
 
 WkBugReader.prototype.getWkBugData = function (callback) { // callback = function (wkBugData)
     if (!this.loaded()) {
@@ -22,15 +22,15 @@ WkBugReader.prototype.getWkBugData = function (callback) { // callback = functio
     } else {
         callback(this.wkBugData);
     }
-}
+};
 
 WkBugReader.prototype.getLoadedWkBugData = function () {
     return this.wkBugData;
-}
+};
 
 WkBugReader.prototype.loaded = function () {
     return !(!this.wkBugDocument);
-}
+};
 
 WkBugReader.extractWkBugData = function (wkBugDocument) {
     function grab(query, fields) {
@@ -189,21 +189,36 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             return patchList;
         },
         description: function () {
-            var comment = grab("#comment_text_0");
-            if (comment) {
-                return stringifyCommentNode(comment);
+            var textNode = grab("#comment_text_0");
+            if (textNode) {
+                return stringifyNode(textNode);
             }
             return null;
         },
         commentList: function () {
             var commentList = [];
             var commentContainer = grab("#comments");
-            var commentNodes = commentContainer.querySelectorAll("#comments > .bz_comment:not(.bz_first_comment)");
+            var commentNodes = commentContainer.querySelectorAll(".bz_comment:not(.bz_first_comment)");
             for (var i = 0; i < commentNodes.length; i++) {
-                commentList.push(stringifyCommentNode(commentNodes[i]));
+                var commentNode = commentNodes[i];
+                var emailNode = commentNode.querySelector(".email");
+                if (!emailNode) {
+                    return null;
+                }
+                var author = emailNode.innerHTML;
+                var email = emailNode.href;
+                var textNode = commentNode.querySelector(".bz_comment_text");
+                if (!textNode) {
+                    return null;
+                }
+                commentList.push({
+                    author: author,
+                    email: email,
+                    text: stringifyNode(textNode),
+                });
             }
             return commentList;
-        }
+        },
     };
     var wkBugData = {};
     for (var attribute in extractMethods) {
@@ -212,16 +227,24 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
         wkBugData[attribute] = data;
     }
     return wkBugData;
-}
+};
 
-function stringifyCommentNode (node) {
-    if 
+function stringifyNode (node) {
+    if (node instanceof Text) {
+        return node.textContent;
+    }
     var s = "";
-
+    for (var i = 0; i < node.childNodes.length; i++) {
+        s += stringifyNode(node.childNodes[i]);
+    }
+    if (node instanceof HTMLAnchorElement && s != node.href) {
+        s += " [" + node.href + "]";
+    }
+    return s;
 }
 
 // FIXME: Remove debug print.
-console.log(WkBugReader.extractWkBugData(document));
+console.log(WkBugReader.extractWkBugData(document).commentList[1].text);
 
 })();
 }
