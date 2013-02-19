@@ -1,5 +1,6 @@
 // from wk_bug_reader import WkBugReader
 // from html import Html
+// from id_storage import IdStorage
 // from urls import Urls
 
 if (!WkBugButton) {
@@ -25,7 +26,7 @@ var htmlTemplates = {
 
 WkBugButton.prototype.loadInitialHtml = function () {
     // Check for existing CrBug.
-    this.getCrBugId(function (crBugId) {
+    IdStorage.getCrBugId(this.wkBugReader.wkBugId, function (crBugId) {
         if (crBugId) {
             // Cr Bug already created, no need to migrate.
             this.setModeCrBugRedirect(crBugId);
@@ -57,18 +58,6 @@ WkBugButton.prototype.setInnerHtml = function (html) {
             this.html.removeChild(this.html.firstChild);
         }
     }
-};
-
-WkBugButton.prototype.getCrBugId = function (callback) { // callback = function (crBugId)
-    chrome.extension.sendMessage(
-        {
-            message: "bg.getCrBugId",
-            wkBugId: this.wkBugReader.wkBugId,
-        },
-        callback
-    );
-    // FIXME: Check the page for auto generated comments stating a cr issue migration.
-    // if (wkBugReader.loaded()) {...}
 };
 
 WkBugButton.prototype.setModeCrBugRedirect = function (crBugId) {

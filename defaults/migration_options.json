@@ -1,0 +1,33 @@
+{
+    "crBugTemplates": {
+        "summary": "{{ summary }}",
+        "description": [
+            "Migrated from WebKit Bugzilla: {{ originalUrl }}",
+            "Originally reported on {{ reportedDate }} by {{ reporterName }} ({{ reporterEmail }}).",
+            "",
+            "Description:",
+            "{{ description }}",
+            "",
+            "",
+            "Attachments:",
+            "{{ attachments }}",
+            "",
+            "",
+            "Original comments:",
+            "{{ comments }}"
+        ],
+        "attachment": [
+            "{{ date }}: {{ name }} [{{ url }}]",
+            ""
+        ],
+        "comment": [
+            "----------------",
+            "Comment #{{ number }}",
+            "Posted on {{ date }} by {{ author }} ({{ email }})",
+            "",
+            "{{ text }}",
+            "",
+            ""
+        ]
+    }
+}

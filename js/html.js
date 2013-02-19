@@ -1,4 +1,5 @@
 // from template import Template
+// from xhr import Xhr
 
 if (!Html) {
 var Html = {};
@@ -15,12 +16,9 @@ Html.fromTemplate = function (htmlTemplate, parameters) {
 }
 
 Html.fromUrl = function (url, callback) { // callback = function (html)
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url);
-    xhr.addEventListener("load", function () {
-        callback(Html.fromString(this.responseText));
+    Xhr.load(url, function (data) {
+        callback(Html.fromString(data));
     });
-    xhr.send();
 }
 
 function domToHtml (dom) {

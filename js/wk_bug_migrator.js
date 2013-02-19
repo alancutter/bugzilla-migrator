@@ -1,4 +1,6 @@
+// from migration_options_storage import MigrationOptionsStorage
 // from wk_bug_reader import WkBugReader
+// from urls import Urls
 
 if (!WkBugMigrator) {
 var WkBugMigrator = {};
@@ -8,8 +10,170 @@ WkBugMigrator.bg = {};
 
 WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
     wkBugData = wkBugData || BugReader.getWkBugDataFromId(wkBugId);
-    // FIXME: Implement this.
-    console.log("Migrate "+wkBugId, wkBugData)
+
+    // FIXME: Remove debug print.
+    console.log("Migrate "+wkBugId, wkBugData);
+
+    MigrationOptionsStorage.load(function (migrationOptions) {
+        var crBugData = convertWkBugData(wkBugData, migrationOptions);
+        chrome.tabs.create(
+            {url: Urls.crNewBugForm},
+            function (tab) {
+                chrome.tabs.executeScript(tab.id, {file: "js/cr_bug_writer.js"}, function () {
+                    console.log("Script executed")
+                    chrome.tabs.sendMessage(tab.id, {
+                        message: "cs.writeCrBug",
+                        crBugData: crBugData,
+                    });
+                    console.log("Message sent")
+                });
+            }
+        );
+    });
+};
+
+function convertWkBugData (wkBugData, migrationOptions) {
+    // FIXME: Implement these...
+    return {
+        summary: function () {
+            return Template.stamp(migrationOptions.crBugTemplates.summary, wkBugData);
+        }(),
+        description: function () {
+            var commentTemplate = migrationOptions.crBugTemplates.comment;
+            wkBugData.comments = "";
+            for (var i = 0; i < wkBugData.commentList.length; i++) {
+                var comment = wkBugData.commentList[i];
+                wkBugData.comments += Template.stamp(commentTemplate, comment);
+            }
+            var attachmentTemplate = migrationOptions.crBugTemplates.attachment;
+            wkBugData.attachments = "";
+            for (var i = 0; i < wkBugData.patchList.length; i++) {
+                var attachment = wkBugData.patchList[i];
+                wkBugData.attachments += Template.stamp(attachmentTemplate, attachment);
+            }
+            return Template.stamp(migrationOptions.crBugTemplates.description, wkBugData);
+        }(),
+        status: function () {
+            if (wkBugData.resolution) {
+                return {
+                    "FIXED": "Fixed",
+                    "INVALID": "Invalid",
+                    "WONTFIX": "WontFix",
+                    "DUPLICATE": "Duplicate",
+                    "WORKSFORME": "WontFix",
+                    "MOVED": "Duplicate",
+                }[wkBugData.resolution];
+            } else {
+                return {
+                    "UNCONFIRMED": "Uncomfirmed",
+                    "NEW": "Untriaged",
+                    "ASSIGNED": "Assigned",
+                    "REOPENED": "Started",
+                }[wkBugData.status];
+            }
+        }(),
+        owner: function () {
+            if (wkBugData.assigneeEmail === "webkit-unassigned@lists.webkit.org") {
+                return "";
+            }
+            return wkBugData.assigneeEmail;
+        }(),
+        cc: function () {
+            return wkBugData.ccList.filter(function (email) {return email !== wkBugData.assigneeEmail;}).join(", ");
+        }(),
+        labelType: function () {
+            if (wkBugData.product === "Security") {
+                return "Type-Security";
+            }
+            if (wkBugData.summary.toLowerCase().indexOf("regression") >= 0) {
+                return "Type-Regression";
+            }
+            return "Type-Bug";
+        }(),
+        labelPriority: function () {
+            var priorityValue = {
+                "P1": 0,
+                "P2": 2,
+                "P3": 2,
+                "P4": 3,
+                "P5": 3,
+            }[wkBugData.priority];
+            var severityValue = {
+                "Blocker": 0,
+                "Critical": 0,
+                "Major": 1,
+                "Normal": 2,
+                "Minor": 2,
+                "Trivial": 3,
+                "Enhancement": 3,
+            }[wkBugData.severity];
+            var value = 2;
+            if (priorityValue === undefined && severityValue !== undefined) {
+                value = severityValue;
+            } else if (priorityValue !== undefined && severityValue === undefined) {
+                value = priorityValue;
+            } else if (priorityValue !== undefined && severityValue !== undefined) {
+                value = Math.min(priorityValue, severityValue);
+            }
+            return "Pri-" + value;
+        }(),
+        labelArea: function () {
+            var area = {
+                "Accessibility": "Feature-Accessibility",
+                "ANGLE": "",
+                "Canvas": "Feature-GPU-Canvas2D",
+                "CSS": "WebKit-CSS",
+                "Evangelism": "Action-Evangelism",
+                "Event Handling": "Webkit-Core",
+                "Forms": "WebKit-Forms",
+                "Frames": "Webkit-Core",
+                "History": "Feature-History",
+                "HTML DOM": "WebKit-DOM",
+                "HTML Editing": "WebKit-Editing",
+                "HTML Events": "Webkit-Core",
+                "Images": "WebKit-Core",
+                "Java": "",
+                "JavaScriptCore": "WebKit-JavaScript",
+                "JavaScriptGlue": "WebKit-JavaScript",
+                "Layout and Rendering": "WebKit-Rendering",
+                "MathML": "",
+                "Media Elements": "Feature-Media",
+                "New Bugs": "",
+                "Page Loading": "WebKit-Loader",
+                "PDF": "Feature-PDF",
+                "Platform": "",
+                "Plug-ins": "Feature-Plugins",
+                "Printing": "Feature-Printing",
+                "Safari Web Inspector": "",
+                "SVG": "WebKit-SVG",
+                "Tables": "WebKit-DOM",
+                "Text": "WebKit-Core",
+                "Tools / Tests": "WebKit-Tools-Test",
+                "Web Audio": "WebKit-Audio",
+                "WebCore JavaScript": "WebKit-JavaScript",
+                "WebCore Misc.": "WebKit-Core",
+                "WebGL": "WebKit-WebGL",
+                "Web Inspector": "WebKit-Core",
+                "WebKit2": "",
+                "WebKit API": "WebKit-WebKitAPI",
+                "WebKit BlackBerry": "",
+                "WebKit BREWMP": "",
+                "WebKit EFL": "",
+                "WebKit Gtk": "",
+                "WebKit Misc.": "WebKit-WebKitAPI",
+                "WebKit Qt": "",
+                "WebKit Website": "Documentation",
+                "WebKit wx": "",
+                "Web Template Framework": "",
+                "XML": "WebKit-Core",
+                "XML DOM": "WebKit-DOM",
+            }[wkBugData.component];
+            if (area !== undefined && area !== "") {
+                return area;
+            }
+            return "WebKit-" + wkBugData.component.replace(/ /g, "-");
+        }(),
+    };
 }
 
 })();

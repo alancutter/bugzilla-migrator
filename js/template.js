@@ -24,14 +24,11 @@ Template.stamp = function (template, parameters) {
                 console.warn("Unable to stamp parameter in template:", matches, template);
                 value = "";
             }
-            result = result.replace(
-                matches[0],
-                value
-            )
+            result = result.replace(matches[0], value);
         }
     }
     return result;
-}
+};
 
 })();
 }

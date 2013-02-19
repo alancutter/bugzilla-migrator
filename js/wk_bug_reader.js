@@ -62,6 +62,9 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             }
             return null;
         },
+        originalUrl: function () {
+            return Urls.getShortWkBugUrl(grab("input[name=id]", "value"));
+        },
         id: function () {
             return grab("input[name=id]", "value");
         },
@@ -176,14 +179,20 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             var patchList = [];
             var rows = table.querySelectorAll("tr");
             for (var i = 1; i < rows.length - 1; i++) {
-                var link = rows[i].querySelector("a[href^=attachment]");
+                var row = rows[i];
+                var a = row.querySelector(".bz_attach_extra_info > a");
+                var link = row.querySelector("a[href^=attachment]");
+                if (!link) {
+                    return null;
+                }
                 var b = link.querySelector("b");
-                if (!b) {
+                if (!a || !b) {
                     return null;
                 }
                 patchList.push({
+                    date: a.innerHTML,
                     name: b.innerHTML,
-                    url: (link.href.indexOf("http") !== 0 ? Urls.bugzillaBase : "") + link.href + "&action=prettypatch",
+                    url: link.href + "&action=prettypatch",
                 });
             }
             return patchList;
@@ -201,17 +210,24 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             var commentNodes = commentContainer.querySelectorAll(".bz_comment:not(.bz_first_comment)");
             for (var i = 0; i < commentNodes.length; i++) {
                 var commentNode = commentNodes[i];
+                var headINode = commentNode.querySelector(".bz_comment_head > i");
+                if (!headINode || headINode.childNodes.length < 5) {
+                    return null;
+                }
+                var date = headINode.childNodes[4].textContent.trimLeft();
                 var emailNode = commentNode.querySelector(".email");
                 if (!emailNode) {
                     return null;
                 }
                 var author = emailNode.innerHTML;
-                var email = emailNode.href;
+                var email = emailNode.href.slice(7);
                 var textNode = commentNode.querySelector(".bz_comment_text");
                 if (!textNode) {
                     return null;
                 }
                 commentList.push({
+                    number: i+1,
+                    date: date,
                     author: author,
                     email: email,
                     text: stringifyNode(textNode),
@@ -242,9 +258,6 @@ function stringifyNode (node) {
     }
     return s;
 }
-
-// FIXME: Remove debug print.
-console.log(WkBugReader.extractWkBugData(document).commentList[1].text);
 
 })();
 }

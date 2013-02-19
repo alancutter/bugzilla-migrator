@@ -11,15 +11,18 @@
     "permissions": [
         "tabs",
         "storage",
-        "https://bugs.webkit.org/*"
+        "https://bugs.webkit.org/*",
+        "https://code.google.com/p/chromium/issues/entry"
     ],
     "background": {
         "persistent": false,
         "scripts": [
             // Imports.
             "js/urls.js",
+            "js/xhr.js",
             "js/html.js",
-            "js/id_storage.js",
+            "js/template.js",
+            "js/migration_options_storage.js",
             "js/wk_bug_reader.js",
             "js/wk_bug_migrator.js",
             "js/urls.js",
