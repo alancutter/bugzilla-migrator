@@ -31,17 +31,7 @@ WkBugButton.prototype.loadInitialHtml = function () {
             // Cr Bug already created, no need to migrate.
             this.setModeCrBugRedirect(crBugId);
         } else {
-            // No Cr Bug found, offer to migrate if bug is valid and active.
-            var migrate = true;
-            if (this.wkBugReader.loaded()) {
-                var wkBugData = this.wkBugReader.getLoadedWkBugData();
-                if (!wkBugData || !wkBugData.active) {
-                    migrate = false;
-                }
-            }
-            if (migrate) {
-                this.setModeMigrate();
-            }
+            this.setModeMigrate();
         }
     }.bind(this));
 };
