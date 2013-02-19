@@ -33,25 +33,41 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
 };
 
 function convertWkBugData (wkBugData, migrationOptions) {
-    // FIXME: Implement these...
+    console.log(migrationOptions);
     return {
         summary: function () {
             return Template.stamp(migrationOptions.crBugTemplates.summary, wkBugData);
         }(),
         description: function () {
-            var commentTemplate = migrationOptions.crBugTemplates.comment;
-            wkBugData.comments = "";
-            for (var i = 0; i < wkBugData.commentList.length; i++) {
-                var comment = wkBugData.commentList[i];
-                wkBugData.comments += Template.stamp(commentTemplate, comment);
+            var singleFields = ["url", "keywords"];
+            for (var i = 0; i < singleFields.length; i++) {
+                var field = singleFields[i];
+                if (wkBugData[field]) {
+                    wkBugData[field] = Template.stamp(migrationOptions.crBugTemplates[field], wkBugData);
+                }
             }
-            var attachmentTemplate = migrationOptions.crBugTemplates.attachment;
-            wkBugData.attachments = "";
-            for (var i = 0; i < wkBugData.patchList.length; i++) {
-                var attachment = wkBugData.patchList[i];
-                wkBugData.attachments += Template.stamp(attachmentTemplate, attachment);
+
+            var multiFields = {
+                "blocks": "blockingList",
+                "dependsOn": "dependentList",
+                "attachments": "patchList",
+                "comments": "commentList",
+            };
+            for (var field in multiFields) {
+                var list = multiFields[field];
+                if (wkBugData[list].length > 0) {
+                    wkBugData[field] = Template.stamp(migrationOptions.crBugTemplates[field].heading, wkBugData);
+                    var fieldTemplate = migrationOptions.crBugTemplates[field].item;
+                    for (var i = 0; i < wkBugData[list].length; i++) {
+                        var value = wkBugData[list][i];
+                        wkBugData[field] += Template.stamp(fieldTemplate, value);
+                    }
+                } else {
+                    wkBugData[field] = "";
+                }
             }
-            return Template.stamp(migrationOptions.crBugTemplates.description, wkBugData);
+
+            return Template.stamp(migrationOptions.crBugTemplates.description, wkBugData).trimRight();
         }(),
         status: function () {
             if (wkBugData.resolution) {

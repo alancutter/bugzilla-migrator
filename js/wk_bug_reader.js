@@ -146,8 +146,10 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             var wkBugLinks = td.querySelectorAll("a[href^=show_bug]");
             for (var i = 0; i < wkBugLinks.length; i++) {
                 var wkBugLink = wkBugLinks[i];
+                var id = wkBugLink.innerHTML;
                 dependentList.push({
-                    id: wkBugLink.innerHTML,
+                    id: id,
+                    url: Urls.getShortWkBugUrl(id),
                     summary: wkBugLink.title,
                     active: !(wkBugLink.parentElement.className == "bz_closed"),
                 });
@@ -163,8 +165,10 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             var wkBugLinks = td.querySelectorAll("a[href^=show_bug]");
             for (var i = 0; i < wkBugLinks.length; i++) {
                 var wkBugLink = wkBugLinks[i];
+                var id = wkBugLink.innerHTML;
                 blockingList.push({
-                    id: wkBugLink.innerHTML,
+                    id: id,
+                    url: Urls.getShortWkBugUrl(id),
                     summary: wkBugLink.title,
                     active: !(wkBugLink.parentElement.className == "bz_closed"),
                 });

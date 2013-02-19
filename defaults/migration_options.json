@@ -4,30 +4,42 @@
         "description": [
             "Migrated from WebKit Bugzilla: {{ originalUrl }}",
             "Originally reported on {{ reportedDate }} by {{ reporterName }} ({{ reporterEmail }}).",
+            "{{ url }}{{ keywords }}{{ blocks }}{{ dependsOn }}",
             "",
             "Description:",
             "{{ description }}",
             "",
             "",
-            "Attachments:",
             "{{ attachments }}",
             "",
             "",
-            "Original comments:",
             "{{ comments }}"
         ],
-        "attachment": [
-            "{{ date }}: {{ name }} [{{ url }}]",
-            ""
-        ],
-        "comment": [
-            "----------------",
-            "Comment #{{ number }}",
-            "Posted on {{ date }} by {{ author }} ({{ email }})",
-            "",
-            "{{ text }}",
-            "",
-            ""
-        ]
+        "url": "URL: {{ url }}\n",
+        "keywords": "Keywords: {{ keywords }}\n",
+        "blocks": {
+            "heading": "Blocks:\n",
+            "item": "[{{ url }}] {{ summary }}\n"
+        },
+        "dependsOn": {
+            "heading": "Depends On:\n",
+            "item": "[{{ url }}] {{ summary }}\n"
+        },
+        "attachments": {
+            "heading": "Attachments:\n",
+            "item": "{{ date }}: {{ name }} [{{ url }}]\n"
+        },
+        "comments": {
+            "heading": "Comments:\n",
+            "item": [
+                "----------------",
+                "Comment #{{ number }}",
+                "Posted on {{ date }} by {{ author }} ({{ email }})",
+                "",
+                "{{ text }}",
+                "",
+                ""
+            ]
+        }
     }
 }

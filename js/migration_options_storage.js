@@ -22,13 +22,29 @@ MigrationOptionsStorage.load = function (callback) { // callback = function (mig
 function loadDefaults (callback) { // callback = function (migrationOptions)
     Xhr.load("defaults/migration_options.json", function (data) {
         var migrationOptions = JSON.parse(data);
-        for (var template in migrationOptions.crBugTemplates) {
-            if (migrationOptions.crBugTemplates[template] instanceof Array) {
-                migrationOptions.crBugTemplates[template] = migrationOptions.crBugTemplates[template].join("\n")
-            }
-        }
+        migrationOptions = joinStringLists(migrationOptions);
         callback(migrationOptions);
     });
+}
+
+function joinStringLists (json) {
+    if (json === null) {
+        return null;
+    }
+    if (json.constructor === Object) {
+        var newJson = {};
+        for (var key in json) {
+            newJson[key] = joinStringLists(json[key]);
+        }
+        return newJson;
+    }
+    if (json.constructor === Array) {
+        if (json.every(function (item) {return item !== null && item.constructor === String;})) {
+            return json.join("\n")
+        }
+        return json;
+    }
+    return json;
 }
 
 })();
