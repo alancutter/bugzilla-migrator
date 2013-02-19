@@ -16,6 +16,10 @@ var queryToField = {
 };
 
 CrBugWriter.cs.writeCrBug = function (crBugData) {
+    // Simulate click on summary field to avoid auto-clear.
+    document.querySelector("#summary").click();
+
+    // Fill in fields.
     for (var query in queryToField) {
         var formField = document.querySelector(query);
         var fieldValue = crBugData[queryToField[query]];

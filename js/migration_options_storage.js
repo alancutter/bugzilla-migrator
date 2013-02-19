@@ -20,7 +20,7 @@ MigrationOptionsStorage.load = function (callback) { // callback = function (mig
 };
 
 function loadDefaults (callback) { // callback = function (migrationOptions)
-    Xhr.load("defaults/migration_options.json", function (data) {
+    Xhr.load("json", "defaults/migration_options.json", function (data) {
         var migrationOptions = JSON.parse(data);
         migrationOptions = joinStringLists(migrationOptions);
         callback(migrationOptions);

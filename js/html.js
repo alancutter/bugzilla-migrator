@@ -15,12 +15,6 @@ Html.fromTemplate = function (htmlTemplate, parameters) {
     return Html.fromString(html);
 }
 
-Html.fromUrl = function (url, callback) { // callback = function (html)
-    Xhr.load(url, function (data) {
-        callback(Html.fromString(data));
-    });
-}
-
 function domToHtml (dom) {
     if (dom instanceof Text) {
         return document.createTextNode(dom.textContent);

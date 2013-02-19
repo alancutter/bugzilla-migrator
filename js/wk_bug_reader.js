@@ -15,10 +15,12 @@ WkBugReader = function WkBugReader (wkBugId, wkBugDocument) {
 
 WkBugReader.prototype.getWkBugData = function (callback) { // callback = function (wkBugData)
     if (!this.loaded()) {
-        Html.fromUrl(Urls.getWkBugUrl(this.wkBugId), function (wkBugDocument) {
+        Xhr.load("document", Urls.getWkBugUrl(this.wkBugId), function (wkBugDocument) {
+            console.log(Urls.getWkBugUrl(this.wkBugId), wkBugDocument);
             this.wkBugDocument = wkBugDocument;
             this.wkBugData = WkBugReader.extractWkBugData(wkBugDocument);
-        });
+            callback(this.wkBugData);
+        }.bind(this));
     } else {
         callback(this.wkBugData);
     }

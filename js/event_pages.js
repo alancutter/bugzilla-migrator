@@ -29,6 +29,14 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                 chrome.tabs.executeScript(tabId, {file: "js/wk_bug_inject.js"});
             } else if (Urls.isWkBugList(tab.url)) {
                 // Inject button onto search results.
+                // Imports
+                chrome.tabs.executeScript(tabId, {file: "js/xhr.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/html.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/template.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_reader.js"});
+                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_button.js"});
                 // Main script
                 chrome.tabs.executeScript(tabId, {file: "js/wk_buglist_inject.js"});
             }
