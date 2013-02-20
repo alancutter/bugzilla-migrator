@@ -6,6 +6,8 @@ if (!WkBugMigrator) {
 var WkBugMigrator = {};
 (function(){
 
+var forkHasBeenAnnounced = false;
+
 WkBugMigrator.bg = {};
 
 WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
@@ -224,6 +226,9 @@ function convertWkBugData (wkBugData, options) {
                 return "OS-" + os;
             }
             return "";
+        }(),
+        labelRestricted: function () {
+            return forkHasBeenAnnounced ? "" : "Restrict-View-Google";
         }(),
     };
 }

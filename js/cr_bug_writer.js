@@ -15,6 +15,7 @@ var queryToField = {
     "#labelenter2": "labelArea",
     "#labelenter3": "labelWkBugId",
     "#labelenter4": "labelOs",
+    "#labelenter5": "labelRestricted",
 };
 
 CrBugWriter.cs.writeCrBug = function (crBugData, wkBugId, active) {
