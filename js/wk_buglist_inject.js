@@ -8,13 +8,16 @@ var WkBugInject = {};
 var cs = {};
 
 cs.inject = function () {
+    // Insert column.
     var colgroup = document.querySelector("colgroup");
     colgroup.appendChild(Html.fromString("<col/>"));
 
+    // Insert header
     var headingRow = document.querySelector(".bz_buglist_header");
-    var header = Html.fromString('<th colspan="1">Migrate</th>');
+    var header = Html.fromString('<th colspan="1">Migration</th>');
     headingRow.appendChild(header);
 
+    // Insert buttons.
     var itemRows = document.querySelectorAll(".bz_bugitem");
     for (var i = 0; i < itemRows.length; i++) {
         var row = itemRows[i];

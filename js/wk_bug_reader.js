@@ -58,9 +58,9 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
     }
     var extractMethods = {
         active: function () {
-            var status = grab("#bug_status > option[selected]", "innerHTML");
-            if (status) {
-                return !(/closed|verified|resolved/i.test(status));
+            var resolutionSettings = grab("#resolution_settings");
+            if (resolutionSettings) {
+                return resolutionSettings.style.display === "none";
             }
             return null;
         },

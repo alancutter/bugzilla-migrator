@@ -24,6 +24,8 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
                     chrome.tabs.sendMessage(tab.id, {
                         message: "cs.writeCrBug",
                         crBugData: crBugData,
+                        wkBugId: wkBugId.id,
+                        active: wkBugData.active,
                     });
                     console.log("Message sent")
                 });

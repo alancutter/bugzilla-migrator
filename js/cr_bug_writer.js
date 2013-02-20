@@ -15,7 +15,7 @@ var queryToField = {
     "#labelenter2": "labelArea",
 };
 
-CrBugWriter.cs.writeCrBug = function (crBugData) {
+CrBugWriter.cs.writeCrBug = function (crBugData, wkBugId, active) {
     // Simulate click on summary field to avoid auto-clear.
     document.querySelector("#summary").click();
 
@@ -31,6 +31,13 @@ CrBugWriter.cs.writeCrBug = function (crBugData) {
             console.warn(formField, "or", fieldValue, "undefined using query:", query);
         }
     }
+
+    // Warn if bug is inactive.
+    if (!active) {
+        var td = document.querySelector(".rowmajor tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr > td ~ td");
+        td.style.color = "red";
+        td.innerHTML = "The Bugzilla bug you are migrating has been marked as resolved.";
+    }
 };
 
 
@@ -38,7 +45,7 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
     switch (request.message) {
         case "cs.writeCrBug":
             console.log("Message received");
-            CrBugWriter.cs.writeCrBug(request.crBugData);
+            CrBugWriter.cs.writeCrBug(request.crBugData, request.wkBugId, request.active);
             break;
     }
 });
