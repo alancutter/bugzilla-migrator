@@ -47,7 +47,6 @@ CrBugWriter.cs.writeCrBug = function (crBugData, wkBugId, active) {
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
     switch (request.message) {
         case "cs.writeCrBug":
-            console.log("Message received");
             CrBugWriter.cs.writeCrBug(request.crBugData, request.wkBugId, request.active);
             break;
     }

@@ -244,7 +244,9 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
     var wkBugData = {};
     for (var attribute in extractMethods) {
         var data = extractMethods[attribute]();
-        if (data === null) {return null;}
+        if (data === null) {
+            return null;
+        }
         wkBugData[attribute] = data;
     }
     return wkBugData;

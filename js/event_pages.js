@@ -18,6 +18,8 @@ function executeBugzillaScripts (tabId) {
     chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
     chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
     chrome.tabs.executeScript(tabId, {file: "js/template.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/cr_query.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/wk_login_checker.js"});
     chrome.tabs.executeScript(tabId, {file: "js/wk_bug_reader.js"});
     chrome.tabs.executeScript(tabId, {file: "js/wk_bug_button.js"});
 }
@@ -44,6 +46,10 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             chrome.tabs.executeScript(tabId, {file: "js/wk_buglist_inject.js"});
             // Show icon in search bar.
             chrome.pageAction.show(tabId);
+        } else if (Urls.isCrBug(tab.url)) {
+            // Inject migration detection script.
+            chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
+            chrome.tabs.executeScript(tabId, {file: "js/cr_bug_inject.js"});
         }
     }
 });
@@ -64,10 +70,17 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
         case "bg.broadcastMessage":
             broadcastMessage(request.payload);
             break;
+        case "bg.broadcastMigration":
+            broadcastMessage({
+                message: "migration",
+                wkBugId: request.wkBugId,
+                crBugId: request.crBugId,
+            });
+            break;
     }
 });
 
-// Background port connections.
+// Background connection requests.
 chrome.extension.onConnect.addListener(function (port) {
     broadcastPorts.push(port);
     port.onDisconnect.addListener(function () {

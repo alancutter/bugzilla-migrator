@@ -11,7 +11,6 @@ OptionsStorage.load = function (callback) { // callback = function (options)
         if (data[storageKey]) {
             callback(data[storageKey]);
         } else {
-            console.log("Loading default options.");
             loadDefaults(function (defaultOptions) {
                 callback(defaultOptions);
             });

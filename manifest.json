@@ -24,7 +24,6 @@
             "js/html.js",
             "js/template.js",
             "js/options_storage.js",
-            "js/wk_bug_reader.js",
             "js/wk_bug_migrator.js",
             "js/urls.js",
             // Main script.

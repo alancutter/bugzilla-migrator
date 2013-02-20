@@ -1,29 +1,19 @@
 // from options_storage import OptionsStorage
-// from wk_bug_reader import WkBugReader
 // from urls import Urls
 
 if (!WkBugMigrator) {
 var WkBugMigrator = {};
 (function(){
 
-var forkHasBeenAnnounced = false;
-
 WkBugMigrator.bg = {};
 
 WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
-    wkBugData = wkBugData || BugReader.getWkBugDataFromId(wkBugId);
-
-    // FIXME: Remove debug print.
-    console.log("Migrate "+wkBugId, wkBugData);
-
     OptionsStorage.load(function (options) {
         var crBugData = convertWkBugData(wkBugData, options);
         chrome.tabs.create(
             {url: Urls.crNewBugForm},
             function (tab) {
                 chrome.tabs.executeScript(tab.id, {file: "js/cr_bug_writer.js"}, function () {
-                    // FIXME: Remove debug prints.
-                    console.log("Sending migration data:", crBugData, wkBugData);
                     chrome.tabs.sendMessage(tab.id, {
                         message: "cs.writeCrBug",
                         crBugData: crBugData,
@@ -37,7 +27,6 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
 };
 
 function convertWkBugData (wkBugData, options) {
-    console.log(options);
     return {
         summary: function () {
             return Template.stamp(options.crBugTemplates.summary, wkBugData);
@@ -228,7 +217,7 @@ function convertWkBugData (wkBugData, options) {
             return "";
         }(),
         labelRestricted: function () {
-            return forkHasBeenAnnounced ? "" : "Restrict-View-Google";
+            return "Restrict-View-Google";
         }(),
     };
 }

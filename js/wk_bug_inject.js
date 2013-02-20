@@ -1,5 +1,6 @@
 // from html import Html
 // from wk_bug_button import WkBugButton
+// from wk_login_checker import WkLoginChecker
 
 if (!WkBugInject) {
 var WkBugInject = {};
@@ -8,6 +9,10 @@ var WkBugInject = {};
 var cs = {};
 
 cs.inject = function () {
+    if (!WkLoginChecker.isLoggedIn()) {
+        return;
+    }
+
     var wkBugId = document.querySelector("input[name=id]").value;
     var wkBugButton = new WkBugButton(wkBugId, document);
 
@@ -28,7 +33,7 @@ cs.inject = function () {
     container.appendChild(table);
     wkBugButton.html.style.float = "right";
     tdRight.appendChild(wkBugButton.html);
-}
+};
 
 cs.inject();
 
