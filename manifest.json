@@ -12,7 +12,7 @@
         "tabs",
         "storage",
         "https://bugs.webkit.org/*",
-        "https://code.google.com/p/chromium/issues/entry"
+        "https://code.google.com/p/chromium/issues/entry",
         "https://code.google.com/p/chromium/issues/detail/*"
     ],
     "background": {

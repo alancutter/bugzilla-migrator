@@ -16,7 +16,6 @@ WkBugReader = function WkBugReader (wkBugId, wkBugDocument) {
 WkBugReader.prototype.getWkBugData = function (callback) { // callback = function (wkBugData)
     if (!this.loaded()) {
         Xhr.loadDocument(Urls.getWkBugUrl(this.wkBugId), function (wkBugDocument) {
-            console.log(Urls.getWkBugUrl(this.wkBugId), wkBugDocument);
             this.wkBugDocument = wkBugDocument;
             this.wkBugData = WkBugReader.extractWkBugData(wkBugDocument);
             callback(this.wkBugData);
@@ -264,9 +263,6 @@ function stringifyNode (node) {
     }
     return s;
 }
-
-// FIXME: Remove debug print
-console.log(WkBugReader.extractWkBugData(document));
 
 })();
 }

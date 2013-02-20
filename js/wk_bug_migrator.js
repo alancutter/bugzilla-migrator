@@ -22,14 +22,14 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
             {url: Urls.crNewBugForm},
             function (tab) {
                 chrome.tabs.executeScript(tab.id, {file: "js/cr_bug_writer.js"}, function () {
-                    console.log("Script executed")
+                    // FIXME: Remove debug prints.
+                    console.log("Sending migration data:", crBugData, wkBugData);
                     chrome.tabs.sendMessage(tab.id, {
                         message: "cs.writeCrBug",
                         crBugData: crBugData,
                         wkBugId: wkBugId.id,
                         active: wkBugData.active,
                     });
-                    console.log("Message sent")
                 });
             }
         );

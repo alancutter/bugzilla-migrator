@@ -4,66 +4,78 @@
 
 (function(){
 
-// Content script injects.
+var broadcastPorts = [];
+
+function broadcastMessage (payload) {
+    for (var i = 0; i < broadcastPorts.length; i++) {
+        broadcastPorts[i].postMessage(payload);
+    }
+}
+
+function executeBugzillaScripts (tabId) {
+    chrome.tabs.executeScript(tabId, {file: "js/xhr.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/html.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/template.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/wk_bug_reader.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/wk_bug_button.js"});
+}
+
+function showOptionsEditor () {
+    // FIXME: Check that this feature is actually wanted then implement.
+}
+
+// Page loaded.
 // FIXME: http://code.google.com/p/chromium/issues/detail?id=162543
-//        Double event firing appears not to be resolved in stable.
+//        Double event firing appears not to be resolved in stable yet.
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     // Tab navigation events
     if (changeInfo.status === "loading") {
-        if (Urls.isBugzilla(tab.url)) {
+        if (Urls.isWkBug(tab.url)) {
+            // Inject button onto Webkit bug.
+            executeBugzillaScripts(tabId);
+            chrome.tabs.executeScript(tabId, {file: "js/wk_bug_inject.js"});
             // Show icon in search bar.
             chrome.pageAction.show(tabId);
-            chrome.tabs.executeScript(tabId, {file: "js/email_finder.js"});
-
-            if (Urls.isWkBug(tab.url)) {
-                // Inject button onto Webkit bug.
-                // Imports
-                chrome.tabs.executeScript(tabId, {file: "js/xhr.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/html.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/template.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_reader.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_button.js"});
-                // Main script
-                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_inject.js"});
-            } else if (Urls.isWkBugList(tab.url)) {
-                // Inject button onto search results.
-                // Imports
-                chrome.tabs.executeScript(tabId, {file: "js/xhr.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/html.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/template.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_reader.js"});
-                chrome.tabs.executeScript(tabId, {file: "js/wk_bug_button.js"});
-                // Main script
-                chrome.tabs.executeScript(tabId, {file: "js/wk_buglist_inject.js"});
-            }
+        } else if (Urls.isWkBugList(tab.url)) {
+            // Inject button onto search results.
+            executeBugzillaScripts(tabId);
+            chrome.tabs.executeScript(tabId, {file: "js/wk_buglist_inject.js"});
+            // Show icon in search bar.
+            chrome.pageAction.show(tabId);
         }
     }
 });
 
 // Popup icon clicked.
 chrome.pageAction.onClicked.addListener(function (tab) {
-    chrome.tabs.sendMessage(tab.id, {message: "cs_findEmail"}, function (email) {
-        chrome.tabs.create({
-            url: "html/migrate_wk_bugs.html?email=" + email
-        });
-    });
+    showOptionsEditor();
 });
 
-// Message handling.
+// Background message handling.
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
     console.log("Message received by background:");
     console.log(request);
-    var response = false;
     switch (request.message) {
         case "bg.migrateWkBug":
             WkBugMigrator.bg.migrateWkBug(request.wkBugId, request.wkBugData);
             break;
+        case "bg.broadcastMessage":
+            broadcastMessage(request.payload);
+            break;
     }
-    return response;
+});
+
+// Background port connections.
+chrome.extension.onConnect.addListener(function (port) {
+    broadcastPorts.push(port);
+    port.onDisconnect.addListener(function () {
+        var i = broadcastPorts.indexOf(port);
+        if (i >= 0) {
+            broadcastPorts.splice(i);
+        }
+    });
 });
 
 })();
