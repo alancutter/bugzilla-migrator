@@ -13,6 +13,7 @@
         "storage",
         "https://bugs.webkit.org/*",
         "https://code.google.com/p/chromium/issues/entry"
+        "https://code.google.com/p/chromium/issues/detail/*"
     ],
     "background": {
         "persistent": false,
@@ -22,7 +23,7 @@
             "js/xhr.js",
             "js/html.js",
             "js/template.js",
-            "js/migration_options_storage.js",
+            "js/options_storage.js",
             "js/wk_bug_reader.js",
             "js/wk_bug_migrator.js",
             "js/urls.js",

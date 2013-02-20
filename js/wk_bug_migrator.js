@@ -1,4 +1,4 @@
-// from migration_options_storage import MigrationOptionsStorage
+// from options_storage import OptionsStorage
 // from wk_bug_reader import WkBugReader
 // from urls import Urls
 
@@ -14,8 +14,8 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
     // FIXME: Remove debug print.
     console.log("Migrate "+wkBugId, wkBugData);
 
-    MigrationOptionsStorage.load(function (migrationOptions) {
-        var crBugData = convertWkBugData(wkBugData, migrationOptions);
+    OptionsStorage.load(function (options) {
+        var crBugData = convertWkBugData(wkBugData, options);
         chrome.tabs.create(
             {url: Urls.crNewBugForm},
             function (tab) {
@@ -34,18 +34,18 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
     });
 };
 
-function convertWkBugData (wkBugData, migrationOptions) {
-    console.log(migrationOptions);
+function convertWkBugData (wkBugData, options) {
+    console.log(options);
     return {
         summary: function () {
-            return Template.stamp(migrationOptions.crBugTemplates.summary, wkBugData);
+            return Template.stamp(options.crBugTemplates.summary, wkBugData);
         }(),
         description: function () {
             var singleFields = ["url", "keywords"];
             for (var i = 0; i < singleFields.length; i++) {
                 var field = singleFields[i];
                 if (wkBugData[field]) {
-                    wkBugData[field] = Template.stamp(migrationOptions.crBugTemplates[field], wkBugData);
+                    wkBugData[field] = Template.stamp(options.crBugTemplates[field], wkBugData);
                 }
             }
 
@@ -58,8 +58,8 @@ function convertWkBugData (wkBugData, migrationOptions) {
             for (var field in multiFields) {
                 var list = multiFields[field];
                 if (wkBugData[list].length > 0) {
-                    wkBugData[field] = Template.stamp(migrationOptions.crBugTemplates[field].heading, wkBugData);
-                    var fieldTemplate = migrationOptions.crBugTemplates[field].item;
+                    wkBugData[field] = Template.stamp(options.crBugTemplates[field].heading, wkBugData);
+                    var fieldTemplate = options.crBugTemplates[field].item;
                     for (var i = 0; i < wkBugData[list].length; i++) {
                         var value = wkBugData[list][i];
                         wkBugData[field] += Template.stamp(fieldTemplate, value);
@@ -69,7 +69,7 @@ function convertWkBugData (wkBugData, migrationOptions) {
                 }
             }
 
-            return Template.stamp(migrationOptions.crBugTemplates.description, wkBugData).trimRight();
+            return Template.stamp(options.crBugTemplates.description, wkBugData).trimRight();
         }(),
         status: function () {
             if (wkBugData.resolution) {
@@ -190,6 +190,40 @@ function convertWkBugData (wkBugData, migrationOptions) {
                 return area;
             }
             return "WebKit-" + wkBugData.component.replace(/ /g, "-");
+        }(),
+        labelWkBugId: function () {
+            return "WebKit-ID-" + wkBugData.id;
+        }(),
+        labelOs: function () {
+            var os = {
+                "All": "All",
+                "Macintosh": "Mac",
+                "Macintosh PowerPC": "Mac",
+                "Macintosh Intel": "Mac",
+                "Android": "Android",
+            }[wkBugData.platform];
+            if (!os) {
+                os = {
+                    "All": "All",
+                    "Windows 2000": "Windows",
+                    "Windows XP": "Windows",
+                    "Windows Server 2003": "Windows",
+                    "Windows Vista": "Windows",
+                    "Windows 7": "Windows",
+                    "Mac OS X 10.3": "Mac",
+                    "Mac OS X 10.4": "Mac",
+                    "Mac OS X 10.5": "Mac",
+                    "Mac OS X 10.6": "Mac",
+                    "Mac OS X 10.7": "Mac",
+                    "Mac OS X 10.8": "Mac",
+                    "Linux": "Linux",
+                    "Android": "Android",
+                }[wkBugData.operatingSystem];
+            }
+            if (os) {
+                return "OS-" + os;
+            }
+            return "";
         }(),
     };
 }

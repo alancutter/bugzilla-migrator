@@ -1,29 +1,29 @@
 // from xhr import Xhr
 
-if (!MigrationOptionsStorage) {
-var MigrationOptionsStorage = {};
+if (!OptionsStorage) {
+var OptionsStorage = {};
 (function(){
 
-var storageKey = "Options.Migration";
+var storageKey = "options.";
 
-MigrationOptionsStorage.load = function (callback) { // callback = function (migrationOptions)
+OptionsStorage.load = function (callback) { // callback = function (options)
     chrome.storage.local.get(storageKey, function (data) {
         if (data[storageKey]) {
             callback(data[storageKey]);
         } else {
             console.log("Loading default options.");
-            loadDefaults(function (defaultMigrationOptions) {
-                callback(defaultMigrationOptions);
+            loadDefaults(function (defaultOptions) {
+                callback(defaultOptions);
             });
         }
     });
 };
 
-function loadDefaults (callback) { // callback = function (migrationOptions)
-    Xhr.load("json", "defaults/migration_options.json", function (data) {
-        var migrationOptions = JSON.parse(data);
-        migrationOptions = joinStringLists(migrationOptions);
-        callback(migrationOptions);
+function loadDefaults (callback) { // callback = function (options)
+    Xhr.loadJson("defaults/options.json", function (json) {
+        var options = json;
+        options = joinStringLists(options);
+        callback(options);
     });
 }
 

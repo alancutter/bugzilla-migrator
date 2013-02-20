@@ -13,6 +13,8 @@ var queryToField = {
     "#labelenter0": "labelType",
     "#labelenter1": "labelPriority",
     "#labelenter2": "labelArea",
+    "#labelenter3": "labelWkBugId",
+    "#labelenter4": "labelOs",
 };
 
 CrBugWriter.cs.writeCrBug = function (crBugData, wkBugId, active) {
@@ -35,7 +37,7 @@ CrBugWriter.cs.writeCrBug = function (crBugData, wkBugId, active) {
     // Warn if bug is inactive.
     if (!active) {
         var td = document.querySelector(".rowmajor tr ~ tr ~ tr ~ tr ~ tr ~ tr ~ tr > td ~ td");
-        td.style.color = "red";
+        td.className = "fielderror";
         td.innerHTML = "The Bugzilla bug you are migrating has been marked as resolved.";
     }
 };

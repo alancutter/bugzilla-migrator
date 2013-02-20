@@ -28,8 +28,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.8129418"
-     inkscape:cx="354.39637"
-     inkscape:cy="1282.271"
+     inkscape:cx="792.35858"
+     inkscape:cy="1344.6006"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -391,5 +391,37 @@
        inkscape:export-filename="/usr/local/google/home/alancutter/repos/bugzilla_migrator/img/cr_redirect.png"
        inkscape:export-xdpi="5.52"
        inkscape:export-ydpi="5.52" />
+    <path
+       style="color:#000000;fill:#404d6c;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 913.49358,-432.20193 c -10.08591,0.10074 -20.33814,1.45627 -30.5312,4.18756 -36.69549,9.83248 -64.99419,35.34916 -79.62509,67.40623 l 61.59376,61.59377 c -5.7836,-26.36533 10.1967,-52.97493 36.53127,-60.03126 4.39294,-1.1771 8.81004,-1.719 13.15625,-1.71874 l 111.21873,-2e-5 c -20.0979,-44.07352 -64.50975,-71.91452 -112.34372,-71.43754 z"
+       id="path3041"
+       inkscape:export-filename="/usr/local/google/home/alancutter/repos/bugzilla_migrator/img/loading_frame_12.png"
+       inkscape:export-xdpi="5.52"
+       inkscape:export-ydpi="5.52"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;fill:#404d6c;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 914.24357,-352.79563 c -3.5398,0.0377 -7.13709,0.5403 -10.71875,1.50001 -22.92248,6.14206 -36.45456,29.60876 -30.31251,52.53121 1.72741,6.44698 4.80518,12.142 8.87496,16.87501 l 0.81251,0.84376 -0.0312,0.0312 c 10.44545,11.49296 26.77233,16.86884 42.84374,12.56251 10.57188,-2.83272 19.14701,-9.36603 24.71874,-17.8125 l 0.56271,-0.96864 0.0312,0.0312 c 6.05272,-9.71508 8.23644,-21.81929 5.03124,-33.78121 -4.99042,-18.62455 -21.40908,-31.0678 -39.68751,-31.78128 l -1.75,0 -1e-5,-0.0312 c -0.1248,2.2e-4 -0.25009,-9.8e-4 -0.375,0 z"
+       id="path3039"
+       inkscape:export-filename="/usr/local/google/home/alancutter/repos/bugzilla_migrator/img/loading_frame_12.png"
+       inkscape:export-xdpi="5.52"
+       inkscape:export-ydpi="5.52"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:0.01000001;color:#000000;fill:#404d6c;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 941.93107,-352.76443 c 10.38083,6.60151 18.41685,16.92938 21.84376,29.71878 3.76283,14.043 1.23052,28.30863 -5.84377,39.8125 l -54.9062,95.12492 c 14.13052,1.34862 28.73319,0.2336 43.24993,-3.6561 65.23621,-17.48008 103.94891,-84.5451 86.46571,-149.78308 -1.0285,-3.83854 -2.2324,-7.56986 -3.5937,-11.21872 l -87.21875,-1e-5 z"
+       id="path3037"
+       inkscape:export-filename="/usr/local/google/home/alancutter/repos/bugzilla_migrator/img/loading_frame_12.png"
+       inkscape:export-xdpi="5.52"
+       inkscape:export-ydpi="5.52"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:0.01000001;color:#000000;fill:#404d6c;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 800.02479,-352.60822 c -8.60302,23.01437 -10.3749,48.83399 -3.53119,74.37505 12.79545,47.75359 52.17229,81.27682 97.93746,88.96874 l 43.53119,-75.40623 c -3.1761,1.63797 -6.56663,2.97566 -10.15625,3.9375 -18.8664,5.05524 -38.16959,-1.22493 -50.59376,-14.65626 l -77.18754,-77.21877 z"
+       id="path3033"
+       inkscape:export-filename="/usr/local/google/home/alancutter/repos/bugzilla_migrator/img/loading_frame_12.png"
+       inkscape:export-xdpi="5.52"
+       inkscape:export-ydpi="5.52"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

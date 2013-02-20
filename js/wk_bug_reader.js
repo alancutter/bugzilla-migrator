@@ -15,7 +15,7 @@ WkBugReader = function WkBugReader (wkBugId, wkBugDocument) {
 
 WkBugReader.prototype.getWkBugData = function (callback) { // callback = function (wkBugData)
     if (!this.loaded()) {
-        Xhr.load("document", Urls.getWkBugUrl(this.wkBugId), function (wkBugDocument) {
+        Xhr.loadDocument(Urls.getWkBugUrl(this.wkBugId), function (wkBugDocument) {
             console.log(Urls.getWkBugUrl(this.wkBugId), wkBugDocument);
             this.wkBugDocument = wkBugDocument;
             this.wkBugData = WkBugReader.extractWkBugData(wkBugDocument);
@@ -58,14 +58,14 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
     }
     var extractMethods = {
         active: function () {
-            var resolutionSettings = grab("#resolution_settings");
-            if (resolutionSettings) {
-                return resolutionSettings.style.display === "none";
+            var status = grab("#bug_status", "value");
+            if (status) {
+                return status !== "RESOLVED";
             }
             return null;
         },
         originalUrl: function () {
-            return Urls.getShortWkBugUrl(grab("input[name=id]", "value"));
+            return Urls.getWkBugUrl(grab("input[name=id]", "value"));
         },
         id: function () {
             return grab("input[name=id]", "value");
@@ -74,7 +74,7 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             return grab("#short_desc_nonedit_display", "innerHTML");
         },
         status: function () {
-            return grab("#bug_status > option[selected]", "innerHTML", "trimRight()");
+            return grab("#bug_status", "value");
         },
         resolution: function () {
             var resolutionSettings = grab("#resolution_settings");
@@ -197,7 +197,7 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
                 }
                 patchList.push({
                     date: a.innerHTML,
-                    name: b.innerHTML,
+                    name: stringifyNode(b),
                     url: link.href + "&action=prettypatch",
                 });
             }
@@ -264,6 +264,9 @@ function stringifyNode (node) {
     }
     return s;
 }
+
+// FIXME: Remove debug print
+console.log(WkBugReader.extractWkBugData(document));
 
 })();
 }
