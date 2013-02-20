@@ -90,10 +90,18 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             return grab("#bz_show_bug_column_2 > table > tbody > tr > td ~ td", "firstChild", "textContent", "slice(0,-4)");
         },
         reporterName: function () {
-            return grab("#bz_show_bug_column_2 a.email > span", "innerHTML");
+            var usernameNode = grab("#bz_show_bug_column_2 a.email");
+            if (usernameNode) {
+                return getNameFromUsernameNode(usernameNode);
+            }
+            return null;
         },
         reporterEmail: function () {
-            return grab("#bz_show_bug_column_2 a.email", "title");
+            usernameNode = grab("#bz_show_bug_column_2 a.email");
+            if (usernameNode) {
+                return getEmailFromUsernameNode(usernameNode);
+            }
+            return null;
         },
         modifiedDate: function () {
             return grab("#bz_show_bug_column_2 > table > tbody > tr ~ tr > td ~ td", "firstChild", "textContent", "slice(0,-1)", "trimRight()");
@@ -103,7 +111,8 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             if (ccNodes) {
                 return Array.prototype.map.call(ccNodes, function (option) {return option.value;});
             }
-            return null;
+            // Node does not exist when there are no ccs.
+            return [];
         },
         product: function () {
             return grab("#product > option[selected]", "value");
@@ -127,10 +136,18 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             return grab("#bug_severity > option[selected]", "value");
         },
         assigneeName: function () {
-            return grab("#bz_assignee_edit_container a.email > span", "innerHTML");
+            var usernameNode = grab("#bz_assignee_edit_container a.email");
+            if (usernameNode) {
+                return getNameFromUsernameNode(usernameNode);
+            }
+            return null;
         },
         assigneeEmail: function () {
-            return grab("#bz_assignee_edit_container a.email", "title");
+            usernameNode = grab("#bz_assignee_edit_container a.email");
+            if (usernameNode) {
+                return getEmailFromUsernameNode(usernameNode);
+            }
+            return null;
         },
         url: function () {
             return grab("#bug_file_loc", "value");
@@ -244,15 +261,18 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
     var wkBugData = {};
     for (var attribute in extractMethods) {
         var data = extractMethods[attribute]();
-        if (data === null) {
-            return null;
+        if (data !== null) {
+            wkBugData[attribute] = data;
+        } else {
+            console.warn("Unable to extract " + attribute + " from document:", wkBugDocument);
+            wkBugData[attribute] = "";
         }
-        wkBugData[attribute] = data;
     }
+    console.log(wkBugData);
     return wkBugData;
 };
 
-function stringifyNode (node) {
+function stringifyNode (node, ignoreLinks) {
     if (node instanceof Text) {
         return node.textContent;
     }
@@ -260,10 +280,28 @@ function stringifyNode (node) {
     for (var i = 0; i < node.childNodes.length; i++) {
         s += stringifyNode(node.childNodes[i]);
     }
-    if (node instanceof HTMLAnchorElement && s != node.href) {
+    if (!ignoreLinks && node instanceof HTMLAnchorElement && s != node.href) {
         s += " [" + node.href + "]";
     }
     return s;
+}
+
+function getNameFromUsernameNode (node) {
+    var name = stringifyNode(node, true);
+    // Check if the username is actually an email address and just take the username part
+    var i = name.indexOf("@");
+    if (i !== -1) {
+        name = name.substring(0, i);
+    }
+    return name;
+}
+
+function getEmailFromUsernameNode (node) {
+    var email = node.title;
+    if (!email) {
+        email = stringifyNode(node, true);
+    }
+    return email;
 }
 
 })();

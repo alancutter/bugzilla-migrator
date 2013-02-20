@@ -18,7 +18,6 @@
     "background": {
         "persistent": false,
         "scripts": [
-            // Imports.
             "js/urls.js",
             "js/xhr.js",
             "js/html.js",
@@ -26,7 +25,6 @@
             "js/options_storage.js",
             "js/wk_bug_migrator.js",
             "js/urls.js",
-            // Main script.
             "js/event_pages.js"
         ]
     },
