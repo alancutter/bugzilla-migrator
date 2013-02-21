@@ -18,16 +18,16 @@ WkBugButton = function (wkBugId, wkBugDocument) {
 
 var htmlTemplates = {
     crBugRedirect: '<a href="{{ url }}">' +
-                   '    <button type="button">' +
+                   '    <button type="button" style="white-space: nowrap;">' +
                    '        {{ id }}' +
-                   '        <img src="' + chrome.extension.getURL("img/button_redirect.svg") + '"/>' +
+                   '        <img src="' + chrome.extension.getURL("img/button_cr_redirect.svg") + '"/>' +
                    '    </button>' +
                    '</a>',
-    loading: '<button type="button">' +
+    loading: '<button type="button" style="white-space: nowrap;">' +
              '    Loading' +
              '    <img src="' + chrome.extension.getURL("img/button_loading.svg") + '"/>' +
              '</button>',
-    migrate: '<button type="button">' +
+    migrate: '<button type="button" style="white-space: nowrap;">' +
              '    Migrate' +
              '    <img src="' + chrome.extension.getURL("img/button_migrate.png") + '"/>' +
              '</button>',

@@ -13,15 +13,23 @@ function broadcastMessage (payload) {
 }
 
 function executeBugzillaScripts (tabId) {
+    chrome.tabs.executeScript(tabId, {file: "js/template.js"});
     chrome.tabs.executeScript(tabId, {file: "js/xhr.js"});
     chrome.tabs.executeScript(tabId, {file: "js/html.js"});
     chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
     chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
-    chrome.tabs.executeScript(tabId, {file: "js/template.js"});
     chrome.tabs.executeScript(tabId, {file: "js/cr_query.js"});
     chrome.tabs.executeScript(tabId, {file: "js/wk_login_checker.js"});
     chrome.tabs.executeScript(tabId, {file: "js/wk_bug_reader.js"});
     chrome.tabs.executeScript(tabId, {file: "js/wk_bug_button.js"});
+}
+
+function executeCrScripts (tabId) {
+    chrome.tabs.executeScript(tabId, {file: "js/template.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/xhr.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/html.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/urls.js"});
+    chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
 }
 
 function showOptionsEditor () {
@@ -48,7 +56,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
             chrome.pageAction.show(tabId);
         } else if (Urls.isCrBug(tab.url)) {
             // Inject migration detection script.
-            chrome.tabs.executeScript(tabId, {file: "js/id_storage.js"});
+            executeCrScripts(tabId);
             chrome.tabs.executeScript(tabId, {file: "js/cr_bug_inject.js"});
         }
     }
