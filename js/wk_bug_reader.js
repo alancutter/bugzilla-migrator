@@ -268,7 +268,6 @@ WkBugReader.extractWkBugData = function (wkBugDocument) {
             wkBugData[attribute] = "";
         }
     }
-    console.log(wkBugData);
     return wkBugData;
 };
 
