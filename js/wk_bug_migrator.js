@@ -217,7 +217,7 @@ function convertWkBugData (wkBugData, options) {
             return "";
         }(),
         labelRestricted: function () {
-            return "Restrict-View-Google";
+            return "";
         }(),
     };
 }
