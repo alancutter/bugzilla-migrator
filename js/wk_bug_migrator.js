@@ -177,10 +177,10 @@ function convertWkBugData (wkBugData, options) {
                 "XML": "",
                 "XML DOM": "Cr-Blink-DOM",
             }[wkBugData.component];
-            if (area !== undefined && area !== "") {
+            if (area !== undefined) {
                 return area;
             }
-            return "Cr-Blink-" + wkBugData.component.replace(/ /g, "-");
+            return "";
         }(),
         labelWkBugId: function () {
             return "WebKit-ID-" + wkBugData.id;
