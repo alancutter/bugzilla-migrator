@@ -1,5 +1,4 @@
 // from template import Template
-// from xhr import Xhr
 
 if (!Html) {
 var Html = {};

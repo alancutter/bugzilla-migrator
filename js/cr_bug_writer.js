@@ -1,3 +1,6 @@
+// from template import Template
+// from xhr import Xhr
+
 if (!CrBugWriter) {
 var CrBugWriter = {};
 (function(){
@@ -17,6 +20,10 @@ var queryToField = {
     "#labelenter4": "labelOs",
     "#labelenter5": "labelRestricted",
 };
+
+var membersUrl = "https://code.google.com/p/chromium/feeds/issueOptions?nonce=1365465824277";
+
+var emailsRemovedDivTemplate = '<div class="fielderror">Non-Chromium emails removed from CC list: {{ removedEmails }}</div>';
 
 CrBugWriter.cs.writeCrBug = function (crBugData, wkBugId, active) {
     // Simulate click on summary field to avoid auto-clear.
@@ -41,6 +48,8 @@ CrBugWriter.cs.writeCrBug = function (crBugData, wkBugId, active) {
         td.className = "fielderror";
         td.innerHTML = "The Bugzilla bug you are migrating has been marked as resolved.";
     }
+
+    sanitiseCcAddresses()
 };
 
 
@@ -51,6 +60,42 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
             break;
     }
 });
+
+function sanitiseCcAddresses () {
+    var field = document.querySelector("#memberenter");
+    var currentCcs = field.value.split(", ");
+    Xhr.loadText(membersUrl, function (text) {
+        // This file begins with ")]}'\n" for some reason.
+        text = text.substring(5);
+        var emailList = [];
+        try {
+            json = JSON.parse(text);
+            for (var i in json.members) {
+                emailList.push(json.members[i].name);
+            }
+        } catch (e) {
+            console.warn("Failed to parse JSON list of Chromium members:", e);
+            return;
+        }
+
+        // Remove emails not in the list.
+        var remainingCcs = [];
+        var removedCcs = [];
+        for (var i in currentCcs) {
+            if (emailList.indexOf(currentCcs[i]) !== -1) {
+                remainingCcs.push(currentCcs[i]);
+            } else {
+                removedCcs.push(currentCcs[i]);
+            }
+        }
+
+        // Update field and notify user if any emails were removed.
+        if (removedCcs.length > 0) {
+            field.value = remainingCcs.join(", ");
+            field.parentElement.appendChild(Html.fromTemplate(emailsRemovedDivTemplate, {removedEmails: removedCcs.join(", ")}));
+        }
+    });
+}
 
 })();
 }

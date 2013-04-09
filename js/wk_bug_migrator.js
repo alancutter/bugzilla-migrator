@@ -13,12 +13,18 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
         chrome.tabs.create(
             {url: Urls.crNewBugForm},
             function (tab) {
-                chrome.tabs.executeScript(tab.id, {file: "js/cr_bug_writer.js"}, function () {
-                    chrome.tabs.sendMessage(tab.id, {
-                        message: "cs.writeCrBug",
-                        crBugData: crBugData,
-                        wkBugId: wkBugId.id,
-                        active: wkBugData.active,
+                chrome.tabs.executeScript(tab.id, {file: "js/template.js"}, function () {
+                    chrome.tabs.executeScript(tab.id, {file: "js/html.js"}, function () {
+                        chrome.tabs.executeScript(tab.id, {file: "js/xhr.js"}, function () {
+                            chrome.tabs.executeScript(tab.id, {file: "js/cr_bug_writer.js"}, function () {
+                                chrome.tabs.sendMessage(tab.id, {
+                                    message: "cs.writeCrBug",
+                                    crBugData: crBugData,
+                                    wkBugId: wkBugId.id,
+                                    active: wkBugData.active,
+                                });
+                            });
+                        });
                     });
                 });
             }
