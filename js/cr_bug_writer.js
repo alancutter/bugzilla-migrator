@@ -15,10 +15,10 @@ var queryToField = {
     "#memberenter": "cc",
     "#labelenter0": "labelType",
     "#labelenter1": "labelPriority",
-    "#labelenter2": "labelArea",
-    "#labelenter3": "labelWkBugId",
-    "#labelenter4": "labelOs",
-    "#labelenter5": "labelRestricted",
+    "#labelenter2": "labelBlink",
+    "#labelenter3": "labelOs",
+    "#labelenter4": "labelWkBugId",
+    "#labelenter5": "labelArea",
 };
 
 var membersUrl = "https://code.google.com/p/chromium/feeds/issueOptions?nonce=1365465824277";

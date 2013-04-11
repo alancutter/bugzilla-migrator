@@ -132,6 +132,43 @@ function convertWkBugData (wkBugData, options) {
             }
             return "Pri-" + value;
         }(),
+        labelBlink: function () {
+            return "Cr-Blink";
+        }(),
+        labelOs: function () {
+            var os = {
+                "All": "All",
+                "Macintosh": "Mac",
+                "Macintosh PowerPC": "Mac",
+                "Macintosh Intel": "Mac",
+                "Android": "Android",
+            }[wkBugData.platform];
+            if (!os) {
+                os = {
+                    "All": "All",
+                    "Windows 2000": "Windows",
+                    "Windows XP": "Windows",
+                    "Windows Server 2003": "Windows",
+                    "Windows Vista": "Windows",
+                    "Windows 7": "Windows",
+                    "Mac OS X 10.3": "Mac",
+                    "Mac OS X 10.4": "Mac",
+                    "Mac OS X 10.5": "Mac",
+                    "Mac OS X 10.6": "Mac",
+                    "Mac OS X 10.7": "Mac",
+                    "Mac OS X 10.8": "Mac",
+                    "Linux": "Linux",
+                    "Android": "Android",
+                }[wkBugData.operatingSystem];
+            }
+            if (os) {
+                return "OS-" + os;
+            }
+            return "OS-All";
+        }(),
+        labelWkBugId: function () {
+            return "WebKit-ID-" + wkBugData.id;
+        }(),
         labelArea: function () {
             var area = {
                 "Accessibility": "Feature-Accessibility",
@@ -186,43 +223,6 @@ function convertWkBugData (wkBugData, options) {
             if (area !== undefined) {
                 return area;
             }
-            return "";
-        }(),
-        labelWkBugId: function () {
-            return "WebKit-ID-" + wkBugData.id;
-        }(),
-        labelOs: function () {
-            var os = {
-                "All": "All",
-                "Macintosh": "Mac",
-                "Macintosh PowerPC": "Mac",
-                "Macintosh Intel": "Mac",
-                "Android": "Android",
-            }[wkBugData.platform];
-            if (!os) {
-                os = {
-                    "All": "All",
-                    "Windows 2000": "Windows",
-                    "Windows XP": "Windows",
-                    "Windows Server 2003": "Windows",
-                    "Windows Vista": "Windows",
-                    "Windows 7": "Windows",
-                    "Mac OS X 10.3": "Mac",
-                    "Mac OS X 10.4": "Mac",
-                    "Mac OS X 10.5": "Mac",
-                    "Mac OS X 10.6": "Mac",
-                    "Mac OS X 10.7": "Mac",
-                    "Mac OS X 10.8": "Mac",
-                    "Linux": "Linux",
-                    "Android": "Android",
-                }[wkBugData.operatingSystem];
-            }
-            if (os) {
-                return "OS-" + os;
-            }
-            return "";
-        }(),
-        labelRestricted: function () {
             return "";
         }(),
     };
