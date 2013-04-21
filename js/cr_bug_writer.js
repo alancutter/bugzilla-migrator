@@ -82,10 +82,12 @@ function sanitiseCcAddresses () {
         var remainingCcs = [];
         var removedCcs = [];
         for (var i in currentCcs) {
-            if (emailList.indexOf(currentCcs[i]) !== -1) {
-                remainingCcs.push(currentCcs[i]);
-            } else {
-                removedCcs.push(currentCcs[i]);
+            if (currentCcs[i]) {
+                if (emailList.indexOf(currentCcs[i]) !== -1) {
+                    remainingCcs.push(currentCcs[i]);
+                } else {
+                    removedCcs.push(currentCcs[i]);
+                }
             }
         }
 
