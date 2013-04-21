@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "WebKit Bugzilla Bug Migrator",
-    "version": "1.4",
+    "version": "1.5",
     "description": "Copy Webkit Bugzilla bugs into Chromium issues.",
     "icons": {
         "16": "img/icon16.png",

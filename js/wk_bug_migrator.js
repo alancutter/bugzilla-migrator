@@ -33,6 +33,12 @@ WkBugMigrator.bg.migrateWkBug = function (wkBugId, wkBugData) {
 };
 
 function convertWkBugData (wkBugData, options) {
+    function getAssigneeEmail (wkBugData) {
+        if (wkBugData.assigneeEmail == "webkit-unassigned@lists.webkit.org") {
+            return "";
+        }
+        return wkBugData.assigneeEmail;
+    }
     return {
         summary: function () {
             return Template.stamp(options.crBugTemplates.summary, wkBugData);
@@ -88,13 +94,14 @@ function convertWkBugData (wkBugData, options) {
             }
         }(),
         owner: function () {
-            if (wkBugData.assigneeEmail === "webkit-unassigned@lists.webkit.org") {
-                return "";
-            }
-            return wkBugData.assigneeEmail;
+            return getAssigneeEmail(wkBugData);
         }(),
         cc: function () {
-            return wkBugData.ccList.filter(function (email) {return email !== wkBugData.assigneeEmail;}).join(", ");
+            var cc = wkBugData.ccList.filter(function (email) {return email !== wkBugData.assigneeEmail;}).join(", ");
+            if (getAssigneeEmail(wkBugData)) {
+                cc = getAssigneeEmail(wkBugData) + ", " + cc;
+            }
+            return cc;
         }(),
         labelType: function () {
             if (wkBugData.product === "Security") {
