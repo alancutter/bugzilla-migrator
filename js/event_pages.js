@@ -72,6 +72,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 crBugId: request.crBugId,
             });
             break;
+        case "bg.setPageAction":
+            chrome.pageAction.show(sender.tab.id);
+            chrome.pageAction.setPopup({
+                tabId: sender.tab.id,
+                popup: request.popup ? request.popup : "",
+            });
     }
 });
 

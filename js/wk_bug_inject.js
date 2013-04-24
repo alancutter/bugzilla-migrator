@@ -10,6 +10,10 @@ var cs = {};
 
 cs.inject = function () {
     if (!WkLoginChecker.isLoggedIn()) {
+        chrome.runtime.sendMessage({
+            message: "bg.setPageAction",
+            popup: "html/page_action_request_login.html",
+        })
         return;
     }
 
