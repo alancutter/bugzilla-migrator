@@ -11,7 +11,7 @@ var cs = {};
 var wkBugRedirectTemplate = '<a href="{{ url }}">' +
                             '    <button type="button" style="white-space: nowrap;">' +
                             '        {{ id }}' +
-                            '        <img src="' + chrome.extension.getURL("img/button_wk_redirect.png") + '"/>' +
+                            '        <img src="' + chrome.runtime.getURL("img/button_wk_redirect.png") + '"/>' +
                             '    </button>' +
                             '</a>';
 
@@ -35,7 +35,7 @@ cs.inject = function () {
 
     // Save data to local storage and post info to all tabs.
     IdStorage.setMapping(wkBugId, crBugId);
-    chrome.extension.sendMessage({
+    chrome.runtime.sendMessage({
         message: "bg.broadcastMigration",
         wkBugId: wkBugId,
         crBugId: crBugId,

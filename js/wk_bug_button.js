@@ -20,21 +20,21 @@ var htmlTemplates = {
     crBugRedirect: '<a href="{{ url }}">' +
                    '    <button type="button" style="white-space: nowrap;">' +
                    '        {{ id }}' +
-                   '        <img src="' + chrome.extension.getURL("img/button_cr_redirect.svg") + '"/>' +
+                   '        <img src="' + chrome.runtime.getURL("img/button_cr_redirect.svg") + '"/>' +
                    '    </button>' +
                    '</a>',
     loading: '<button type="button" style="white-space: nowrap;">' +
              '    Loading' +
-             '    <img src="' + chrome.extension.getURL("img/button_loading.svg") + '"/>' +
+             '    <img src="' + chrome.runtime.getURL("img/button_loading.svg") + '"/>' +
              '</button>',
     migrate: '<button type="button" style="white-space: nowrap;">' +
              '    Migrate' +
-             '    <img src="' + chrome.extension.getURL("img/button_migrate.png") + '"/>' +
+             '    <img src="' + chrome.runtime.getURL("img/button_migrate.png") + '"/>' +
              '</button>',
 };
 
 WkBugButton.prototype.addBroadcastListener = function () {
-    this.broadcastPort = chrome.extension.connect();
+    this.broadcastPort = chrome.runtime.connect();
     this.broadcastPort.onMessage.addListener(function (request) {
         if (request.message === "migration" && request.wkBugId == this.getWkBugId()) {
             this.setModeCrBugRedirect(request.crBugId);
@@ -67,7 +67,7 @@ WkBugButton.prototype.searchForExistingCrBug = function () {
             if (new RegExp("WebKit-ID-" + this.getWkBugId()).test(crBugInfo.csvLine)) {
                 this.setModeCrBugRedirect(crBugInfo.crBugId);
                 IdStorage.setMapping(this.getWkBugId(), crBugInfo.crBugId);
-                chrome.extension.sendMessage({
+                chrome.runtime.sendMessage({
                     message: "bg.broadcastMigration",
                     wkBugId: this.getWkBugId(),
                     crBugId: crBugInfo.crBugId,
@@ -117,7 +117,7 @@ WkBugButton.prototype.migrateWkBug = function () {
     this.setModeLoading();
     this.wkBugReader.getWkBugData(function (wkBugData) {
         this.setModeMigrate();
-        chrome.extension.sendMessage({
+        chrome.runtime.sendMessage({
             message: "bg.migrateWkBug",
             wkBugId: this.getWkBugId(),
             wkBugData: wkBugData,
